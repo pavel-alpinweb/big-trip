@@ -1,8 +1,8 @@
 import {render} from '../render.js';
-import TestComponent from '../view/test-component.js';
+import Filters from '../view/filters.js';
 
 export default class FiltersPresenter {
   init(filtersContainer) {
-    render(new TestComponent, filtersContainer);
+    render(new Filters, filtersContainer);
   }
 }
