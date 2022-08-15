@@ -1,8 +1,8 @@
 import {render} from '../render.js';
-import TestComponent from '../view/test-component.js';
+import PointForm from '../view/point-form.js';
 
 export default class ListPresenter {
   init(listContainer) {
-    render(new TestComponent, listContainer);
+    render(new PointForm, listContainer);
   }
 }
