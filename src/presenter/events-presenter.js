@@ -1,8 +1,8 @@
-import {render} from '../render.js';
-import TestComponent from '../view/test-component.js';
+import {render, RenderPosition} from '../render.js';
+import Sort from '../view/sort.js';
 
 export default class EventsPresenter {
   init(eventsContainer) {
-    render(new TestComponent, eventsContainer);
+    render(new Sort, eventsContainer, RenderPosition.AFTERBEGIN);
   }
 }
