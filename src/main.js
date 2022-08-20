@@ -1,3 +1,5 @@
+import {generateDestination} from './mock/mock.js';
+
 import HeaderPresenter from './presenter/header-presenter.js';
 import FiltersPresenter from './presenter/filters-presenter.js';
 import EventsPresenter from './presenter/events-presenter.js';
@@ -20,3 +22,6 @@ headerPresenter.init(headerContainer);
 filtersPresenter.init(filtersContainer);
 eventsPresenter.init(eventsContainer);
 listPresenter.init(listContainer);
+
+// eslint-disable-next-line
+console.log('generateDestination', generateDestination());
