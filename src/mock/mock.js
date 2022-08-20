@@ -1,3 +1,5 @@
+import {TYPES} from '../utils/constants.js';
+
 export const generateDestination = () => ({
   'id': 1,
   'description': 'Chamonix, is a beautiful city, a true asian pearl, with crowded streets.',
@@ -20,6 +22,8 @@ export const generateOffersByType = (type) => ({
   type,
   'offers': Array.from({length: 3}, generateOffer),
 });
+
+export const generateOffersByTypeArray = () => (Object.values(TYPES).map((type) => generateOffersByType(type)));
 
 export const generatePoint = (destination = null) => ({
   'base_price': 1100,

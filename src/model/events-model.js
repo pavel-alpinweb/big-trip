@@ -1,5 +1,4 @@
-import {generateDestination, generateOffersByType, generatePoint} from '../mock/mock.js';
-import {TYPES} from '../utils/constants';
+import {generateDestination, generatePoint, generateOffersByTypeArray} from '../mock/mock.js';
 
 export default class EventsModel {
   destination = generateDestination();
@@ -14,5 +13,5 @@ export default class EventsModel {
   };
 
   point = generatePoint(this.destination);
-  offersByType = Object.values(TYPES).map((type) => generateOffersByType(type));
+  offersByType = generateOffersByTypeArray();
 }
