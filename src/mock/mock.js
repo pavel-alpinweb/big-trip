@@ -21,11 +21,11 @@ export const generateOffersByType = (type) => ({
   'offers': Array.from({length: 3}, generateOffer),
 });
 
-export const generatePoint = () => ({
+export const generatePoint = (destination = null) => ({
   'base_price': 1100,
   'date_from': '2019-07-10T22:55:56.845Z',
   'date_to': '2019-07-11T11:22:13.375Z',
-  'destination': null,
+  destination,
   'id': '0',
   'is_favorite': false,
   'offers': [1, 2, 4],
