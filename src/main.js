@@ -1,4 +1,4 @@
-import {generateDestination, generateOffer, generateOffersByType, generatePoint} from './mock/mock.js';
+import EventsModel from './model/events-model.js';
 
 import HeaderPresenter from './presenter/header-presenter.js';
 import FiltersPresenter from './presenter/filters-presenter.js';
@@ -24,10 +24,4 @@ eventsPresenter.init(eventsContainer);
 listPresenter.init(listContainer);
 
 // eslint-disable-next-line
-console.log('generateDestination', generateDestination());
-// eslint-disable-next-line
-console.log('generateOffer', generateOffer());
-// eslint-disable-next-line
-console.log('generateOffersByType', generateOffersByType('taxi'));
-// eslint-disable-next-line
-console.log('generatePoint', generatePoint());
+console.log('EventsModel', new EventsModel());
