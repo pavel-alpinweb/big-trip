@@ -9,3 +9,9 @@ export const generateDestination = () => ({
     }
   ]
 });
+
+export const generateOffer = () => ({
+  id: 1,
+  title: 'Upgrade to a business class',
+  price: 120
+});
