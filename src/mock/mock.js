@@ -15,3 +15,8 @@ export const generateOffer = () => ({
   title: 'Upgrade to a business class',
   price: 120
 });
+
+export const generateOffersByType = (type) => ({
+  type,
+  offers: Array.from({length: 3}, generateOffer),
+});
