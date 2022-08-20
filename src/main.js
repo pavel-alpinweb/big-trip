@@ -1,4 +1,4 @@
-import {generateDestination, generateOffer, generateOffersByType} from './mock/mock.js';
+import {generateDestination, generateOffer, generateOffersByType, generatePoint} from './mock/mock.js';
 
 import HeaderPresenter from './presenter/header-presenter.js';
 import FiltersPresenter from './presenter/filters-presenter.js';
@@ -29,3 +29,5 @@ console.log('generateDestination', generateDestination());
 console.log('generateOffer', generateOffer());
 // eslint-disable-next-line
 console.log('generateOffersByType', generateOffersByType('taxi'));
+// eslint-disable-next-line
+console.log('generatePoint', generatePoint());
