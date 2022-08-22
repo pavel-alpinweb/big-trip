@@ -2,6 +2,17 @@ import {createElement} from '../render.js';
 
 const isFavorite = (isFavoriteParam) => isFavoriteParam ? 'event__favorite-btn--active' : '';
 
+const createOffersListTemplate = (offers) => `
+<ul class="event__selected-offers">
+    ${offers.map((offer) => `
+    <li className="event__offer">
+        <span className="event__offer-title">${offer.title}</span>
+        &plus;&euro;&nbsp;
+        <span className="event__offer-price">${offer.price}</span>
+    </li>`).join('')}
+</ul>
+`;
+
 const createPointTemplate = (props) => `
 <li class="trip-events__item">
   <div class="event">
@@ -22,13 +33,7 @@ const createPointTemplate = (props) => `
       &euro;&nbsp;<span class="event__price-value">${props.point.base_price}</span>
     </p>
     <h4 class="visually-hidden">Offers:</h4>
-    <ul class="event__selected-offers">
-      <li class="event__offer">
-        <span class="event__offer-title">Order Uber</span>
-        &plus;&euro;&nbsp;
-        <span class="event__offer-price">20</span>
-      </li>
-    </ul>
+    ${createOffersListTemplate(props.offersArray)}
     <button class="event__favorite-btn ${isFavorite(props.point.is_favorite)}" type="button">
       <span class="visually-hidden">Add to favorite</span>
       <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
