@@ -5,22 +5,24 @@ const isFavorite = (isFavoriteParam) => isFavoriteParam ? 'event__favorite-btn--
 const createOffersListTemplate = (offers) => `
 <ul class="event__selected-offers">
     ${offers.map((offer) => `
-    <li className="event__offer">
-        <span className="event__offer-title">${offer.title}</span>
+    <li class="event__offer">
+        <span class="event__offer-title">${offer.title}</span>
         &plus;&euro;&nbsp;
-        <span className="event__offer-price">${offer.price}</span>
+        <span class="event__offer-price">${offer.price}</span>
     </li>`).join('')}
 </ul>
 `;
+
+const typeName = (type) => type[0].toUpperCase() + type.substring(1);
 
 const createPointTemplate = (props) => `
 <li class="trip-events__item">
   <div class="event">
     <time class="event__date" datetime="2019-03-18">MAR 18</time>
     <div class="event__type">
-      <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon">
+      <img class="event__type-icon" width="42" height="42" src="img/icons/${props.point.type}.png" alt="Event type icon">
     </div>
-    <h3 class="event__title">Taxi Amsterdam</h3>
+    <h3 class="event__title">${typeName(props.point.type)} ${props.point.destination.name}</h3>
     <div class="event__schedule">
       <p class="event__time">
         <time class="event__start-time" datetime="2019-03-18T10:30">10:30</time>
