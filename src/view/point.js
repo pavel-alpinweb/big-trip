@@ -4,11 +4,11 @@ const isFavorite = (isFavoriteParam) => isFavoriteParam ? 'event__favorite-btn--
 
 const createOffersListTemplate = (offers) => `
 <ul class="event__selected-offers">
-    ${offers.map((offer) => `
+    ${offers.map(({title, price}) => `
     <li class="event__offer">
-        <span class="event__offer-title">${offer.title}</span>
+        <span class="event__offer-title">${title}</span>
         &plus;&euro;&nbsp;
-        <span class="event__offer-price">${offer.price}</span>
+        <span class="event__offer-price">${price}</span>
     </li>`).join('')}
 </ul>
 `;
