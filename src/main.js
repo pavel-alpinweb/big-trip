@@ -5,6 +5,8 @@ import FiltersPresenter from './presenter/filters-presenter.js';
 import EventsPresenter from './presenter/events-presenter.js';
 import ListPresenter from './presenter/list-presenter.js';
 
+// Models
+const eventsModel = new EventsModel();
 
 // Containers
 const headerContainer = document.querySelector('.trip-main');
@@ -16,7 +18,7 @@ const listContainer = document.querySelector('.trip-events__list');
 const headerPresenter = new HeaderPresenter();
 const filtersPresenter = new FiltersPresenter();
 const eventsPresenter = new EventsPresenter();
-const listPresenter = new ListPresenter();
+const listPresenter = new ListPresenter(eventsModel.points);
 
 headerPresenter.init(headerContainer);
 filtersPresenter.init(filtersContainer);
@@ -24,4 +26,4 @@ eventsPresenter.init(eventsContainer);
 listPresenter.init(listContainer);
 
 // eslint-disable-next-line
-console.log('EventsModel', new EventsModel());
+console.log('EventsModel', eventsModel);

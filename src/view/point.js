@@ -43,6 +43,9 @@ const createPointTemplate = () => `
 export default class Point {
   constructor(props) {
     this.props = props;
+
+    // eslint-disable-next-line
+    console.log('props', this.props);
   }
 
   getTemplate() {
