@@ -12,8 +12,8 @@ export const generateDestination = () => ({
   ]
 });
 
-export const generateOffer = () => ({
-  'id': 1,
+export const generateOffer = (el, i) => ({
+  'id': i,
   'title': 'Upgrade to a business class',
   'price': 120
 });
@@ -32,6 +32,6 @@ export const generatePoint = (destination = null) => ({
   destination,
   'id': '0',
   'is_favorite': false,
-  'offers': [1, 2, 4],
+  'offers': [0, 2],
   'type': 'bus'
 });
