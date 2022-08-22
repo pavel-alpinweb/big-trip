@@ -41,6 +41,10 @@ const createPointTemplate = () => `
 `;
 
 export default class Point {
+  constructor(props) {
+    this.props = props;
+  }
+
   getTemplate() {
     return createPointTemplate();
   }
