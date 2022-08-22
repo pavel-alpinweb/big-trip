@@ -1,6 +1,6 @@
 import {createElement} from '../render.js';
 
-const createPointTemplate = () => `
+const createPointTemplate = (props) => `
 <li class="trip-events__item">
   <div class="event">
     <time class="event__date" datetime="2019-03-18">MAR 18</time>
@@ -17,7 +17,7 @@ const createPointTemplate = () => `
       <p class="event__duration">30M</p>
     </div>
     <p class="event__price">
-      &euro;&nbsp;<span class="event__price-value">20</span>
+      &euro;&nbsp;<span class="event__price-value">${props.base_price}</span>
     </p>
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
@@ -49,7 +49,7 @@ export default class Point {
   }
 
   getTemplate() {
-    return createPointTemplate();
+    return createPointTemplate(this.props);
   }
 
   getElement() {
