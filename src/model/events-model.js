@@ -6,7 +6,7 @@ export default class EventsModel {
     'base_price': 222,
     'date_from': '',
     'date_to': '',
-    'destination': '',
+    'destination': null,
     'is_favorite': false,
     'offers': [],
     'type': 'taxi'

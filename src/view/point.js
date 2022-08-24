@@ -1,5 +1,5 @@
 import {createElement} from '../render.js';
-import {formatEventDate, formatEventTime, deferenceBetweenDays} from '../utils/helpers.js';
+import {formatEventDate, formatEventTime, deferenceBetweenDays, typeName} from '../utils/helpers.js';
 
 const isFavorite = (isFavoriteParam) => isFavoriteParam ? 'event__favorite-btn--active' : '';
 
@@ -13,8 +13,6 @@ const createOffersListTemplate = (offers) => `
     </li>`).join('')}
 </ul>
 `;
-
-const typeName = (type) => type[0].toUpperCase() + type.substring(1);
 
 const createPointTemplate = (props) => `
 <li class="trip-events__item">

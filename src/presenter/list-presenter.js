@@ -8,7 +8,9 @@ export default class ListPresenter {
   }
 
   init(listContainer) {
-    render(new PointForm, listContainer);
+    const currentPoint = this.eventsModel.point;
+    const currentOffersArray = this.eventsModel.getOffersList(currentPoint.type, currentPoint.offers);
+    render(new PointForm({point: currentPoint, offersArray: currentOffersArray}), listContainer);
     const PointClass = Point;
     for (const point of this.eventsModel.points) {
       const offersArray = this.eventsModel.getOffersList(point.type, point.offers);

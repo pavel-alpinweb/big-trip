@@ -19,5 +19,6 @@ const deferenceBetweenDays = (from, to) => {
     return `${durationDates.$d.minutes}M`;
   }
 };
+const typeName = (type) => type[0].toUpperCase() + type.substring(1);
 
-export {formatEventDate, formatEventTime, deferenceBetweenDays};
+export {formatEventDate, formatEventTime, deferenceBetweenDays, typeName};
