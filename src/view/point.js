@@ -1,4 +1,5 @@
 import {createElement} from '../render.js';
+import {formatEventDate, formatEventTime, deferenceBetweenDays} from '../utils/helpers.js';
 
 const isFavorite = (isFavoriteParam) => isFavoriteParam ? 'event__favorite-btn--active' : '';
 
@@ -18,18 +19,18 @@ const typeName = (type) => type[0].toUpperCase() + type.substring(1);
 const createPointTemplate = (props) => `
 <li class="trip-events__item">
   <div class="event">
-    <time class="event__date" datetime="2019-03-18">MAR 18</time>
+    <time class="event__date" datetime="2019-03-18">${formatEventDate(props.point.date_from)}</time>
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/${props.point.type}.png" alt="Event type icon">
     </div>
     <h3 class="event__title">${typeName(props.point.type)} ${props.point.destination.name}</h3>
     <div class="event__schedule">
       <p class="event__time">
-        <time class="event__start-time" datetime="2019-03-18T10:30">10:30</time>
+        <time class="event__start-time" datetime="2019-03-18T10:30">${formatEventTime(props.point.date_from)}</time>
         &mdash;
-        <time class="event__end-time" datetime="2019-03-18T11:00">11:00</time>
+        <time class="event__end-time" datetime="2019-03-18T11:00">${formatEventTime(props.point.date_to)}</time>
       </p>
-      <p class="event__duration">30M</p>
+      <p class="event__duration">${deferenceBetweenDays(props.point.date_from, props.point.date_to)}</p>
     </div>
     <p class="event__price">
       &euro;&nbsp;<span class="event__price-value">${props.point.base_price}</span>
