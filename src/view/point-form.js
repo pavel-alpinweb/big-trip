@@ -4,6 +4,7 @@ import {typeName, formatEventDateTime} from '../utils/helpers';
 const createOffersListTemplate = (offers) => {
   if (offers.length <= 0) {return '';}
   else {return `
+    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
     <div class="event__available-offers">
         ${offers.map(({title, price}) => `
         <div class="event__offer-selector">
@@ -102,7 +103,7 @@ const createPointFormTemplate = (props) => `
         <label class="event__label  event__type-output" for="event-destination-1">
           ${typeName(props.point.type)}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${props.point.destination.name}" list="destination-list-1">
+        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${props.point.destination?.name ?? ''}" list="destination-list-1">
         <datalist id="destination-list-1">
           <option value="Amsterdam"></option>
           <option value="Geneva"></option>
@@ -131,7 +132,6 @@ const createPointFormTemplate = (props) => `
     </header>
     <section class="event__details">
       <section class="event__section  event__section--offers">
-        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
         ${createOffersListTemplate(props.offersArray)}
       </section>

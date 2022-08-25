@@ -3,7 +3,7 @@ import {generateDestination, generatePoint, generateOffersByTypeArray} from '../
 export default class EventsModel {
   destination = generateDestination();
   localPoint = {
-    'base_price': 222,
+    'base_price': '',
     'date_from': '',
     'date_to': '',
     'destination': null,
