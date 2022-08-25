@@ -8,7 +8,7 @@ export default class ListPresenter {
   }
 
   init(listContainer) {
-    const currentPoint = this.eventsModel.localPoint;
+    const currentPoint = this.eventsModel.point;
     const currentOffersArray = this.eventsModel.getOffersList(currentPoint.type, currentPoint.offers);
     render(new PointForm({point: currentPoint, offersArray: currentOffersArray}), listContainer);
     const PointClass = Point;
