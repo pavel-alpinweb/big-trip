@@ -10,6 +10,8 @@ export default class ListPresenter {
   init(listContainer) {
     const currentPoint = this.eventsModel.point;
     const currentOffersArray = this.eventsModel.getOffersList(currentPoint.type, currentPoint.offers);
+    // eslint-disable-next-line no-console
+    console.log('currentPoint', currentPoint);
     render(new PointForm({point: currentPoint, offersArray: currentOffersArray}), listContainer);
     const PointClass = Point;
     for (const point of this.eventsModel.points) {
