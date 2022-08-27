@@ -27,6 +27,18 @@ export default class ListPresenter {
 
   #renderPoint(point, offersArray) {
     const pointComponent = new Point({point, offersArray});
+    const pontFormComponent = new PointForm({point, offersArray});
+
+    pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+      console.log('element', pointComponent.element);
+    });
+
+    pontFormComponent.element.querySelector('.event__save-btn').addEventListener('click', (e) => {
+      e.preventDefault();
+      console.log('form', pontFormComponent.element);
+    });
+
     render(pointComponent, this.#listContainer);
+    render(pontFormComponent, this.#listContainer);
   }
 }
