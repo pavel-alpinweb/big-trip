@@ -21,7 +21,12 @@ export default class ListPresenter {
   init() {
     for (const point of this.#eventsModel.points) {
       const offersArray = this.#eventsModel.getOffersList(point.type, point.offers);
-      render(new Point({point, offersArray}), this.#listContainer);
+      this.#renderPoint(point, offersArray);
     }
+  }
+
+  #renderPoint(point, offersArray) {
+    const pointComponent = new Point({point, offersArray});
+    render(pointComponent, this.#listContainer);
   }
 }
