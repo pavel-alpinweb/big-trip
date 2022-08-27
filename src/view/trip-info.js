@@ -1,6 +1,6 @@
 import {createElement} from '../render.js';
 
-const createTripInfo = () => `
+const createTripInfoTemplate = () => `
 <section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
     <h1 class="trip-info__title">Amsterdam &mdash; Chamonix &mdash; Geneva</h1>
@@ -15,19 +15,21 @@ const createTripInfo = () => `
 `;
 
 export default class TripInfo {
-  getTemplate() {
-    return createTripInfo();
+  #element = null;
+
+  get template() {
+    return createTripInfoTemplate();
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
 
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }
