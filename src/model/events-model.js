@@ -1,8 +1,8 @@
 import {generateDestination, generatePoint, generateOffersByTypeArray} from '../mock/mock.js';
 
 export default class EventsModel {
-  destination = generateDestination();
-  localPoint = {
+  #destination = generateDestination();
+  #localPoint = {
     'base_price': '',
     'date_from': '',
     'date_to': '',
@@ -12,9 +12,29 @@ export default class EventsModel {
     'type': 'taxi'
   };
 
-  point = generatePoint(this.destination);
-  points = Array.from({length: 5}, () => generatePoint(generateDestination()));
-  offersByType = generateOffersByTypeArray();
+  #point = generatePoint(this.destination);
+  #points = Array.from({length: 5}, () => generatePoint(generateDestination()));
+  #offersByType = generateOffersByTypeArray();
+
+  get destination() {
+    return this.#destination;
+  }
+
+  get localPoint() {
+    return this.#localPoint;
+  }
+
+  get point() {
+    return this.#point;
+  }
+
+  get points() {
+    return this.#points;
+  }
+
+  get offersByType() {
+    return this.#offersByType;
+  }
 
   getOffersList = (type, idsList) => {
     const resultArray = [];
