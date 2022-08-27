@@ -29,16 +29,19 @@ export default class ListPresenter {
     const pointComponent = new Point({point, offersArray});
     const pontFormComponent = new PointForm({point, offersArray});
 
+    const replaceComponents = (newComponent,oldComponent) => {
+      this.#listContainer.replaceChild(newComponent, oldComponent);
+    };
+
     pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
-      console.log('element', pointComponent.element);
+      replaceComponents(pontFormComponent.element, pointComponent.element);
     });
 
-    pontFormComponent.element.querySelector('.event__save-btn').addEventListener('click', (e) => {
+    pontFormComponent.element.querySelector('form').addEventListener('submit', (e) => {
       e.preventDefault();
-      console.log('form', pontFormComponent.element);
+      replaceComponents(pointComponent.element, pontFormComponent.element);
     });
 
     render(pointComponent, this.#listContainer);
-    render(pontFormComponent, this.#listContainer);
   }
 }
