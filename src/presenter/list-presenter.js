@@ -33,13 +33,28 @@ export default class ListPresenter {
       this.#listContainer.replaceChild(newComponent, oldComponent);
     };
 
+    const onEscKeyDown = (evt) => {
+      if (evt.key === 'Escape' || evt.key === 'Esc') {
+        evt.preventDefault();
+        replaceComponents(pointComponent.element, pontFormComponent.element);
+        document.removeEventListener('keydown', onEscKeyDown);
+      }
+    };
+
     pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
       replaceComponents(pontFormComponent.element, pointComponent.element);
+      document.addEventListener('keydown', onEscKeyDown);
+    });
+
+    pontFormComponent.element.querySelector('.event__reset-btn').addEventListener('click', () => {
+      replaceComponents(pointComponent.element, pontFormComponent.element);
+      document.removeEventListener('keydown', onEscKeyDown);
     });
 
     pontFormComponent.element.querySelector('form').addEventListener('submit', (e) => {
       e.preventDefault();
       replaceComponents(pointComponent.element, pontFormComponent.element);
+      document.removeEventListener('keydown', onEscKeyDown);
     });
 
     render(pointComponent, this.#listContainer);
