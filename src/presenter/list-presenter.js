@@ -1,20 +1,62 @@
-import {render} from '../render.js';
+import {render, RenderPosition} from '../render.js';
 import PointForm from '../view/point-form.js';
 import Point from '../view/point.js';
 
 export default class ListPresenter {
-  constructor(eventsModel) {
-    this.eventsModel = eventsModel;
+  #eventsModel = null;
+  #listContainer = null;
+  #newPoint = null;
+  #currentOffersArray = [];
+  constructor(eventsModel, listContainer) {
+    this.#eventsModel = eventsModel;
+    this.#listContainer = listContainer;
+    this.#newPoint = this.#eventsModel.localPoint;
+    this.#currentOffersArray = this.#eventsModel.getOffersList(this.#newPoint.type, this.#newPoint.offers);
   }
 
-  init(listContainer) {
-    const currentPoint = this.eventsModel.point;
-    const currentOffersArray = this.eventsModel.getOffersList(currentPoint.type, currentPoint.offers);
-    render(new PointForm({point: currentPoint, offersArray: currentOffersArray}), listContainer);
-    const PointClass = Point;
-    for (const point of this.eventsModel.points) {
-      const offersArray = this.eventsModel.getOffersList(point.type, point.offers);
-      render(new PointClass({point, offersArray}), listContainer);
+  editNewPoint() {
+    render(new PointForm({point: this.#newPoint, offersArray: this.#currentOffersArray}), this.#listContainer, RenderPosition.AFTERBEGIN);
+  }
+
+  init() {
+    for (const point of this.#eventsModel.points) {
+      const offersArray = this.#eventsModel.getOffersList(point.type, point.offers);
+      this.#renderPoint(point, offersArray);
     }
+  }
+
+  #renderPoint(point, offersArray) {
+    const pointComponent = new Point({point, offersArray});
+    const pontFormComponent = new PointForm({point, offersArray});
+
+    const replaceComponents = (newComponent,oldComponent) => {
+      this.#listContainer.replaceChild(newComponent, oldComponent);
+    };
+
+    const onEscKeyDown = (evt) => {
+      if (evt.key === 'Escape' || evt.key === 'Esc') {
+        evt.preventDefault();
+        replaceComponents(pointComponent.element, pontFormComponent.element);
+        document.removeEventListener('keydown', onEscKeyDown);
+      }
+    };
+
+    pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+      replaceComponents(pontFormComponent.element, pointComponent.element);
+      document.addEventListener('keydown', onEscKeyDown);
+    });
+
+    pontFormComponent.element.querySelector('.event__reset-btn').addEventListener('click', () => {
+      replaceComponents(pointComponent.element, pontFormComponent.element);
+      document.removeEventListener('keydown', onEscKeyDown);
+    });
+
+    pontFormComponent.element.querySelector('form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      replaceComponents(pointComponent.element, pontFormComponent.element);
+      document.removeEventListener('keydown', onEscKeyDown);
+    });
+
+    render(pointComponent, this.#listContainer);
   }
 }
