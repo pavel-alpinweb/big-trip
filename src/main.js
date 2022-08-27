@@ -18,12 +18,12 @@ const listContainer = document.querySelector('.trip-events__list');
 const headerPresenter = new HeaderPresenter();
 const filtersPresenter = new FiltersPresenter();
 const eventsPresenter = new EventsPresenter();
-const listPresenter = new ListPresenter(eventsModel);
+const listPresenter = new ListPresenter(eventsModel, listContainer);
 
 headerPresenter.init(headerContainer);
 filtersPresenter.init(filtersContainer);
 eventsPresenter.init(eventsContainer);
-listPresenter.init(listContainer);
+listPresenter.init();
 
 // eslint-disable-next-line
 console.log('EventsModel', eventsModel);
