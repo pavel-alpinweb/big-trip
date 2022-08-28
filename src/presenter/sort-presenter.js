@@ -11,7 +11,7 @@ export default class SortPresenter {
     this.#listContainer = listContainer;
   }
 
-  init(eventsModel, eventsContainer) {
+  init() {
     if (this.#eventsModel.points.length > 0) {
       render(new Sort, this.#listContainer, RenderPosition.AFTERBEGIN);
     }
