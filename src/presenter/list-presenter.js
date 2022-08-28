@@ -1,6 +1,7 @@
 import {render, RenderPosition} from '../render.js';
 import PointForm from '../view/point-form.js';
 import Point from '../view/point.js';
+import EmptyMessage from '../view/empty-message';
 
 export default class ListPresenter {
   #eventsModel = null;
@@ -19,9 +20,13 @@ export default class ListPresenter {
   }
 
   init() {
-    for (const point of this.#eventsModel.points) {
-      const offersArray = this.#eventsModel.getOffersList(point.type, point.offers);
-      this.#renderPoint(point, offersArray);
+    if (this.#eventsModel.points.length === 0) {
+      render(new EmptyMessage, this.#listContainer);
+    } else {
+      for (const point of this.#eventsModel.points) {
+        const offersArray = this.#eventsModel.getOffersList(point.type, point.offers);
+        this.#renderPoint(point, offersArray);
+      }
     }
   }
 
