@@ -1,4 +1,4 @@
-import {render, RenderPosition} from '../render.js';
+import {render, RenderPosition} from '../framework/render.js';
 import PointForm from '../view/point-form.js';
 import Point from '../view/point.js';
 import EmptyMessage from '../view/empty-message';
