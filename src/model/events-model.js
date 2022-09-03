@@ -13,7 +13,7 @@ export default class EventsModel {
   };
 
   #point = generatePoint(this.destination);
-  #points = Array.from({length: 0}, () => generatePoint(generateDestination()));
+  #points = Array.from({length: 5}, () => generatePoint(generateDestination()));
   #offersByType = generateOffersByTypeArray();
 
   get destination() {
