@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view';
 import {typeName, formatEventDateTime} from '../utils/helpers';
 
 const createOffersListTemplate = (offers) => {
@@ -142,26 +142,13 @@ const createPointFormTemplate = (props) => `
 </li>
 `;
 
-export default class PointForm {
-  #element = null;
-
+export default class PointForm extends AbstractView{
   constructor(props) {
+    super();
     this.props = props;
   }
 
   get template() {
     return createPointFormTemplate(this.props);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

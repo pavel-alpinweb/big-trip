@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view';
 import {formatEventDate, formatEventTime, deferenceBetweenDays, typeName} from '../utils/helpers.js';
 
 const isFavorite = (isFavoriteParam) => isFavoriteParam ? 'event__favorite-btn--active' : '';
@@ -48,26 +48,13 @@ const createPointTemplate = (props) => `
 </li>
 `;
 
-export default class Point {
-  #element = null;
-
+export default class Point extends AbstractView{
   constructor(props) {
+    super();
     this.props = props;
   }
 
   get template() {
     return createPointTemplate(this.props);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
