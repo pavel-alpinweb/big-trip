@@ -46,20 +46,22 @@ export default class ListPresenter {
       }
     };
 
-    pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    // pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    //   replaceComponents(pontFormComponent.element, pointComponent.element);
+    //   document.addEventListener('keydown', onEscKeyDown);
+    // });
+
+    pointComponent.setClickHandler(() => {
       replaceComponents(pontFormComponent.element, pointComponent.element);
       document.addEventListener('keydown', onEscKeyDown);
     });
 
-    pontFormComponent.element.querySelector('.event__reset-btn').addEventListener('click', () => {
+    pontFormComponent.setClickHandler(() => {
       replaceComponents(pointComponent.element, pontFormComponent.element);
-      document.removeEventListener('keydown', onEscKeyDown);
     });
 
-    pontFormComponent.element.querySelector('form').addEventListener('submit', (e) => {
-      e.preventDefault();
+    pontFormComponent.setSubmitHandler(() => {
       replaceComponents(pointComponent.element, pontFormComponent.element);
-      document.removeEventListener('keydown', onEscKeyDown);
     });
 
     render(pointComponent, this.#listContainer);
