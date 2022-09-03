@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view';
 import {typeName, formatEventDateTime} from '../utils/helpers';
 
 const createOffersListTemplate = (offers) => {
@@ -142,10 +142,9 @@ const createPointFormTemplate = (props) => `
 </li>
 `;
 
-export default class PointForm {
-  #element = null;
-
+export default class PointForm extends AbstractView{
   constructor(props) {
+    super();
     this.props = props;
   }
 
@@ -153,15 +152,23 @@ export default class PointForm {
     return createPointFormTemplate(this.props);
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
+  setClickHandler = (callback) => {
+    this._callback.click = callback;
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#clickHandler);
+  };
 
-    return this.#element;
-  }
+  setSubmitHandler = (callback) => {
+    this._callback.submit = callback;
+    this.element.querySelector('form').addEventListener('submit', this.#submitHandler);
+  };
 
-  removeElement() {
-    this.#element = null;
-  }
+  #clickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.click();
+  };
+
+  #submitHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.submit();
+  };
 }

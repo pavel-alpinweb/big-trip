@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view';
 import {formatEventDate, formatEventTime, deferenceBetweenDays, typeName} from '../utils/helpers.js';
 
 const isFavorite = (isFavoriteParam) => isFavoriteParam ? 'event__favorite-btn--active' : '';
@@ -48,10 +48,9 @@ const createPointTemplate = (props) => `
 </li>
 `;
 
-export default class Point {
-  #element = null;
-
+export default class Point extends AbstractView{
   constructor(props) {
+    super();
     this.props = props;
   }
 
@@ -59,15 +58,13 @@ export default class Point {
     return createPointTemplate(this.props);
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
+  setClickHandler = (callback) => {
+    this._callback.click = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
+  };
 
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
-  }
+  #clickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.click();
+  };
 }
