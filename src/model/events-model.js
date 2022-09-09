@@ -1,8 +1,9 @@
 import {generateDestination, generatePoint, generateOffersByTypeArray} from '../mock/mock.js';
 import dayjs from 'dayjs';
+import {DATES} from '../utils/constants';
 
 export default class EventsModel {
-  #destination = generateDestination();
+  #destination = generateDestination(0);
   #localPoint = {
     'base_price': '',
     'date_from': '',
@@ -14,7 +15,7 @@ export default class EventsModel {
   };
 
   #point = generatePoint(this.destination);
-  #points = Array.from({length: 5}, (el, index) => generatePoint(generateDestination(index)));
+  #points = Array.from(DATES, ([dateFrom, dateTo], index) => generatePoint(generateDestination(index), dateFrom, dateTo));
   #offersByType = generateOffersByTypeArray();
 
   get destination() {
@@ -71,7 +72,7 @@ export default class EventsModel {
     } else if(startMonth === finishMonth) {
       return `${startMonth} ${startDate} &mdash; ${finishDate}`;
     } else {
-      return `${startMonth} ${startDate} &mdash; ${startMonth} ${finishDate}`;
+      return `${startMonth} ${startDate} &mdash; ${finishMonth} ${finishDate}`;
     }
   }
 

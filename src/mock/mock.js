@@ -29,10 +29,10 @@ export const generateOffersByType = (type) => ({
 
 export const generateOffersByTypeArray = () => (Object.values(TYPES).map((type) => generateOffersByType(type)));
 
-export const generatePoint = (destination = null) => ({
+export const generatePoint = (destination = null, dateFrom, dateTo) => ({
   'base_price': getRandomInteger(100, 2000),
-  'date_from': '2019-07-10T22:55:56.845Z',
-  'date_to': '2019-07-11T11:22:13.375Z',
+  'date_from': dateFrom,
+  'date_to': dateTo,
   destination,
   'id': '0',
   'is_favorite': false,
