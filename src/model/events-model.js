@@ -32,6 +32,10 @@ export default class EventsModel {
     return this.#points;
   }
 
+  get totalPrice() {
+    return this.#points.reduce((prev, curr) => prev + Number(curr.base_price), 0);
+  }
+
   get offersByType() {
     return this.#offersByType;
   }
