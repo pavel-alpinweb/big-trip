@@ -46,7 +46,10 @@ export default class EventsModel {
     for (const point of this.points) {
       allNames.push(point.destination.name);
     }
-    return Array.from(new Set(allNames)).join('&nbsp;&mdash;&nbsp;');
+    if (allNames.length > 3) {
+      allNames.splice(1, allNames.length - 2, '...');
+    }
+    return allNames.join('&nbsp;&mdash;&nbsp;');
   }
 
   get tripDuring() {
