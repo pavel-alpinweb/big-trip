@@ -16,12 +16,12 @@ const listContainer = document.querySelector('.trip-events__list');
 
 // Presenters
 const headerPresenter = new HeaderPresenter(eventsModel, headerContainer);
-const filtersPresenter = new FiltersPresenter();
+const filtersPresenter = new FiltersPresenter(eventsModel, filtersContainer);
 const sortPresenter = new SortPresenter(eventsModel, eventsContainer);
 const listPresenter = new ListPresenter(eventsModel, listContainer);
 
 headerPresenter.init();
-filtersPresenter.init(filtersContainer);
+filtersPresenter.init();
 sortPresenter.init();
 listPresenter.init();
 

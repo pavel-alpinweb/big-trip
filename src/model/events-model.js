@@ -38,6 +38,16 @@ export default class EventsModel {
     return this.#offersByType;
   }
 
+  get pastPoints() {
+    const currentDate = dayjs(new Date());
+    return this.#points.filter((point) => currentDate.diff(point.date_from, 'd') > 0);
+  }
+
+  get futurePoints() {
+    const currentDate = dayjs(new Date());
+    return this.#points.filter((point) => currentDate.diff(point.date_from, 'd') < 0);
+  }
+
   get totalPrice() {
     return this.points.reduce((prev, curr) => {
       const totalBasePrice = prev + Number(curr.base_price);
