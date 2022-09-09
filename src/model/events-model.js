@@ -32,12 +32,20 @@ export default class EventsModel {
     return this.#points;
   }
 
-  get totalPrice() {
-    return this.#points.reduce((prev, curr) => prev + Number(curr.base_price), 0);
-  }
-
   get offersByType() {
     return this.#offersByType;
+  }
+
+  get totalPrice() {
+    return this.points.reduce((prev, curr) => prev + Number(curr.base_price), 0);
+  }
+
+  get pointsNames() {
+    const allNames = [];
+    for (const point of this.points) {
+      allNames.push(point.destination.name);
+    }
+    return Array.from(new Set(allNames)).join('&nbsp;&mdash;&nbsp;');
   }
 
   getOffersList = (type, idsList) => {
