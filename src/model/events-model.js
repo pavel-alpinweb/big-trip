@@ -38,7 +38,11 @@ export default class EventsModel {
   }
 
   get totalPrice() {
-    return this.points.reduce((prev, curr) => prev + Number(curr.base_price), 0);
+    return this.points.reduce((prev, curr) => {
+      const totalBasePrice = prev + Number(curr.base_price);
+      const offersList = this.getOffersList(curr.type, curr.offers);
+      return offersList.reduce((p, c) => p + c.price, totalBasePrice);
+    }, 0);
   }
 
   get pointsNames() {

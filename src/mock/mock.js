@@ -16,7 +16,7 @@ export const generateDestination = (i) => ({
 export const generateOffer = (el, i) => ({
   'id': i,
   'title': 'Upgrade to a business class',
-  'price': 120
+  'price': getRandomInteger(i, 100),
 });
 
 export const generateOffersByType = (type) => ({
@@ -27,12 +27,12 @@ export const generateOffersByType = (type) => ({
 export const generateOffersByTypeArray = () => (Object.values(TYPES).map((type) => generateOffersByType(type)));
 
 export const generatePoint = (destination = null) => ({
-  'base_price': 1100,
+  'base_price': getRandomInteger(100, 2000),
   'date_from': '2019-07-10T22:55:56.845Z',
   'date_to': '2019-07-11T11:22:13.375Z',
   destination,
   'id': '0',
   'is_favorite': false,
   'offers': [0, 2],
-  'type': 'bus'
+  'type': Object.values(TYPES)[getRandomInteger(0, Object.values(TYPES).length - 1)],
 });
