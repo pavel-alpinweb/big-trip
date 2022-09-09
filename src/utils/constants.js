@@ -9,3 +9,11 @@ export const TYPES = {
   SIGHTSEEING: 'sightseeing',
   RESTAURANT: 'restaurant',
 };
+
+export const POINTS_NAMES = [
+  'Amsterdam',
+  'Chamonix',
+  'Geneva',
+  'Bishkek',
+  'Krasnodar',
+];

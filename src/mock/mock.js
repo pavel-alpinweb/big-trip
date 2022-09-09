@@ -1,13 +1,14 @@
-import {TYPES} from '../utils/constants.js';
+import {TYPES, POINTS_NAMES} from '../utils/constants.js';
+import {getRandomInteger} from '../utils/helpers.js';
 
-export const generateDestination = () => ({
-  'id': 1,
-  'description': 'Chamonix, is a beautiful city, a true asian pearl, with crowded streets.',
-  'name': 'Chamonix',
+export const generateDestination = (i) => ({
+  'id': i,
+  'description': `${POINTS_NAMES[getRandomInteger(0, POINTS_NAMES.length - 1)]}, is a beautiful city, a true asian pearl, with crowded streets.`,
+  'name': `${POINTS_NAMES[getRandomInteger(0, POINTS_NAMES.length - 1)]}`,
   'pictures': [
     {
-      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
-      'description': 'Chamonix parliament building'
+      'src': `http://picsum.photos/300/200?r=${getRandomInteger(0, i)}`,
+      'description': `${POINTS_NAMES[getRandomInteger(0, POINTS_NAMES.length - 1)]} parliament building`
     }
   ]
 });
