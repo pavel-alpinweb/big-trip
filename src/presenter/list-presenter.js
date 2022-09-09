@@ -46,11 +46,6 @@ export default class ListPresenter {
       }
     };
 
-    // pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
-    //   replaceComponents(pontFormComponent.element, pointComponent.element);
-    //   document.addEventListener('keydown', onEscKeyDown);
-    // });
-
     pointComponent.setClickHandler(() => {
       replaceComponents(pontFormComponent.element, pointComponent.element);
       document.addEventListener('keydown', onEscKeyDown);
