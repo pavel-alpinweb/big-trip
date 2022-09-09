@@ -1,17 +1,20 @@
 import {TYPES, POINTS_NAMES} from '../utils/constants.js';
 import {getRandomInteger} from '../utils/helpers.js';
 
-export const generateDestination = (i) => ({
-  'id': i,
-  'description': `${POINTS_NAMES[getRandomInteger(0, POINTS_NAMES.length - 1)]}, is a beautiful city, a true asian pearl, with crowded streets.`,
-  'name': `${POINTS_NAMES[getRandomInteger(0, POINTS_NAMES.length - 1)]}`,
-  'pictures': [
-    {
-      'src': `http://picsum.photos/300/200?r=${getRandomInteger(0, i)}`,
-      'description': `${POINTS_NAMES[getRandomInteger(0, POINTS_NAMES.length - 1)]} parliament building`
-    }
-  ]
-});
+export const generateDestination = (i) => {
+  const name = POINTS_NAMES[getRandomInteger(0, POINTS_NAMES.length - 1)];
+  return {
+    'id': i,
+    'description': `${name}, is a beautiful city, a true asian pearl, with crowded streets.`,
+    'name': `${name}`,
+    'pictures': [
+      {
+        'src': `http://picsum.photos/300/200?r=${getRandomInteger(0, i)}`,
+        'description': `${name} parliament building`
+      }
+    ]
+  };
+};
 
 export const generateOffer = (el, i) => ({
   'id': i,
