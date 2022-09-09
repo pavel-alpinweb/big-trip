@@ -1,4 +1,5 @@
 import {generateDestination, generatePoint, generateOffersByTypeArray} from '../mock/mock.js';
+import dayjs from 'dayjs';
 
 export default class EventsModel {
   #destination = generateDestination();
@@ -46,6 +47,25 @@ export default class EventsModel {
       allNames.push(point.destination.name);
     }
     return Array.from(new Set(allNames)).join('&nbsp;&mdash;&nbsp;');
+  }
+
+  get tripDuring() {
+    const startPoint = this.points[0];
+    const finishPoint = this.points[this.points.length - 1];
+
+    const startDate = dayjs(startPoint.date_from).format('D');
+    const startMonth = dayjs(startPoint.date_from).format('MMM');
+
+    const finishDate = dayjs(finishPoint.date_to).format('D');
+    const finishMonth = dayjs(finishPoint.date_to).format('MMM');
+
+    if (startMonth === finishMonth && startDate === finishDate) {
+      return `${startMonth} ${startDate}`;
+    } else if(startMonth === finishMonth) {
+      return `${startMonth} ${startDate} &mdash; ${finishDate}`;
+    } else {
+      return `${startMonth} ${startDate} &mdash; ${startMonth} ${finishDate}`;
+    }
   }
 
   getOffersList = (type, idsList) => {

@@ -5,7 +5,7 @@ const createTripInfoTemplate = (props) => `
   <div class="trip-info__main">
     <h1 class="trip-info__title">${props.pointsNames}</h1>
 
-    <p class="trip-info__dates">Mar 18&nbsp;&mdash;&nbsp;20</p>
+    <p class="trip-info__dates">${props.tripDuring}</p>
   </div>
 
   <p class="trip-info__cost">

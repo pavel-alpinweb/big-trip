@@ -10,6 +10,6 @@ export default class HeaderPresenter {
   }
 
   init() {
-    render(new TripInfo({totalPrice: this.#eventsModel.totalPrice, pointsNames: this.#eventsModel.pointsNames}), this.#headerContainer, RenderPosition.AFTERBEGIN);
+    render(new TripInfo({totalPrice: this.#eventsModel.totalPrice, pointsNames: this.#eventsModel.pointsNames, tripDuring: this.#eventsModel.tripDuring}), this.#headerContainer, RenderPosition.AFTERBEGIN);
   }
 }
