@@ -3,7 +3,6 @@ import dayjs from 'dayjs';
 import {DATES} from '../utils/constants';
 
 export default class EventsModel {
-  #destination = generateDestination(0);
   #localPoint = {
     'base_price': '',
     'date_from': '',
@@ -14,20 +13,11 @@ export default class EventsModel {
     'type': 'taxi'
   };
 
-  #point = generatePoint(this.destination);
   #points = Array.from(DATES, ([dateFrom, dateTo], index) => generatePoint(generateDestination(index), dateFrom, dateTo));
   #offersByType = generateOffersByTypeArray();
 
-  get destination() {
-    return this.#destination;
-  }
-
   get localPoint() {
     return this.#localPoint;
-  }
-
-  get point() {
-    return this.#point;
   }
 
   get points() {
