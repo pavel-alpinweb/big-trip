@@ -1,4 +1,4 @@
-import {render, RenderPosition} from '../framework/render.js';
+import {render} from '../framework/render.js';
 import PointForm from '../view/point-form.js';
 import Point from '../view/point.js';
 import EmptyMessage from '../view/empty-message';
@@ -6,17 +6,9 @@ import EmptyMessage from '../view/empty-message';
 export default class ListPresenter {
   #eventsModel = null;
   #listContainer = null;
-  #newPoint = null;
-  #currentOffersArray = [];
   constructor(eventsModel, listContainer) {
     this.#eventsModel = eventsModel;
     this.#listContainer = listContainer;
-    this.#newPoint = this.#eventsModel.localPoint;
-    this.#currentOffersArray = this.#eventsModel.getOffersList(this.#newPoint.type, this.#newPoint.offers);
-  }
-
-  editNewPoint() {
-    render(new PointForm({point: this.#newPoint, offersArray: this.#currentOffersArray}), this.#listContainer, RenderPosition.AFTERBEGIN);
   }
 
   init() {
