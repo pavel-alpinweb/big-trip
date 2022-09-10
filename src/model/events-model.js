@@ -1,6 +1,6 @@
 import {generateDestination, generatePoint, generateOffersByTypeArray} from '../mock/mock.js';
 import dayjs from 'dayjs';
-import {DATES} from '../utils/constants';
+import {DATES, POINTS_NAMES} from '../utils/constants';
 
 export default class EventsModel {
   #localPoint = {
@@ -13,8 +13,9 @@ export default class EventsModel {
     'type': 'taxi'
   };
 
-  #points = Array.from(DATES, ([dateFrom, dateTo], index) => generatePoint(generateDestination(index), dateFrom, dateTo));
+  #points = Array.from(DATES, ([dateFrom, dateTo]) => generatePoint(dateFrom, dateTo));
   #offersByType = generateOffersByTypeArray();
+  #destinations = Array.from(POINTS_NAMES, (index, name) => generateDestination(index, name));
 
   get localPoint() {
     return this.#localPoint;
@@ -49,7 +50,7 @@ export default class EventsModel {
   get pointsNames() {
     const allNames = [];
     for (const point of this.points) {
-      allNames.push(point.destination.name);
+      allNames.push(this.getDestinationById(point.destination).name);
     }
     if (allNames.length > 3) {
       allNames.splice(1, allNames.length - 2, '...');
@@ -88,4 +89,6 @@ export default class EventsModel {
     }
     return resultArray;
   };
+
+  getDestinationById = (id) => this.#destinations.find((item) => item.id === id);
 }

@@ -1,20 +1,17 @@
-import {TYPES, POINTS_NAMES} from '../utils/constants.js';
+import {TYPES} from '../utils/constants.js';
 import {getRandomInteger} from '../utils/helpers.js';
 
-export const generateDestination = (i) => {
-  const name = POINTS_NAMES[getRandomInteger(0, POINTS_NAMES.length - 1)];
-  return {
-    'id': i,
-    'description': `${name}, is a beautiful city, a true asian pearl, with crowded streets.`,
-    'name': `${name}`,
-    'pictures': [
-      {
-        'src': `http://picsum.photos/300/200?r=${getRandomInteger(0, i)}`,
-        'description': `${name} parliament building`
-      }
-    ]
-  };
-};
+export const generateDestination = (name, i) => ({
+  'id': i,
+  'description': `${name}, is a beautiful city, a true asian pearl, with crowded streets.`,
+  'name': `${name}`,
+  'pictures': [
+    {
+      'src': `http://picsum.photos/300/200?r=${getRandomInteger(0, i)}`,
+      'description': `${name} parliament building`
+    }
+  ]
+});
 
 export const generateOffer = (el, i) => ({
   'id': i,
@@ -29,11 +26,11 @@ export const generateOffersByType = (type) => ({
 
 export const generateOffersByTypeArray = () => (Object.values(TYPES).map((type) => generateOffersByType(type)));
 
-export const generatePoint = (destination = null, dateFrom, dateTo) => ({
+export const generatePoint = (dateFrom, dateTo) => ({
   'base_price': getRandomInteger(100, 2000),
   'date_from': dateFrom,
   'date_to': dateTo,
-  destination,
+  'destination': getRandomInteger(0, 2),
   'id': '0',
   'is_favorite': false,
   'offers': [0, 2],

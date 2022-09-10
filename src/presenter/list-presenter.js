@@ -25,14 +25,15 @@ export default class ListPresenter {
     } else {
       for (const point of this.#eventsModel.points) {
         const offersArray = this.#eventsModel.getOffersList(point.type, point.offers);
-        this.#renderPoint(point, offersArray);
+        const destination = this.#eventsModel.getDestinationById(point.destination);
+        this.#renderPoint(point, offersArray, destination);
       }
     }
   }
 
-  #renderPoint(point, offersArray) {
-    const pointComponent = new Point({point, offersArray});
-    const pontFormComponent = new PointForm({point, offersArray});
+  #renderPoint(point, offersArray, destination) {
+    const pointComponent = new Point({point, offersArray, destination});
+    const pontFormComponent = new PointForm({point, offersArray, destination});
 
     const replaceComponents = (newComponent,oldComponent) => {
       this.#listContainer.replaceChild(newComponent, oldComponent);
