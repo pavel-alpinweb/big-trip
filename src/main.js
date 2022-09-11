@@ -15,13 +15,13 @@ const filtersContainer = document.querySelector('.trip-controls__filters');
 const listContainer = document.querySelector('.trip-events__list');
 
 // Presenters
-const headerPresenter = new HeaderPresenter();
-const filtersPresenter = new FiltersPresenter();
+const headerPresenter = new HeaderPresenter(eventsModel, headerContainer, listContainer);
+const filtersPresenter = new FiltersPresenter(eventsModel, filtersContainer);
 const sortPresenter = new SortPresenter(eventsModel, eventsContainer);
 const listPresenter = new ListPresenter(eventsModel, listContainer);
 
-headerPresenter.init(headerContainer);
-filtersPresenter.init(filtersContainer);
+headerPresenter.init();
+filtersPresenter.init();
 sortPresenter.init();
 listPresenter.init();
 

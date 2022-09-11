@@ -1,4 +1,4 @@
-import {render, RenderPosition} from '../framework/render.js';
+import {render} from '../framework/render.js';
 import PointForm from '../view/point-form.js';
 import Point from '../view/point.js';
 import EmptyMessage from '../view/empty-message';
@@ -6,17 +6,9 @@ import EmptyMessage from '../view/empty-message';
 export default class ListPresenter {
   #eventsModel = null;
   #listContainer = null;
-  #newPoint = null;
-  #currentOffersArray = [];
   constructor(eventsModel, listContainer) {
     this.#eventsModel = eventsModel;
     this.#listContainer = listContainer;
-    this.#newPoint = this.#eventsModel.localPoint;
-    this.#currentOffersArray = this.#eventsModel.getOffersList(this.#newPoint.type, this.#newPoint.offers);
-  }
-
-  editNewPoint() {
-    render(new PointForm({point: this.#newPoint, offersArray: this.#currentOffersArray}), this.#listContainer, RenderPosition.AFTERBEGIN);
   }
 
   init() {
@@ -25,14 +17,15 @@ export default class ListPresenter {
     } else {
       for (const point of this.#eventsModel.points) {
         const offersArray = this.#eventsModel.getOffersList(point.type, point.offers);
-        this.#renderPoint(point, offersArray);
+        const destination = this.#eventsModel.getDestinationById(point.destination);
+        this.#renderPoint(point, offersArray, destination);
       }
     }
   }
 
-  #renderPoint(point, offersArray) {
-    const pointComponent = new Point({point, offersArray});
-    const pontFormComponent = new PointForm({point, offersArray});
+  #renderPoint(point, offersArray, destination) {
+    const pointComponent = new Point({point, offersArray, destination});
+    const pontFormComponent = new PointForm({point, offersArray, destination});
 
     const replaceComponents = (newComponent,oldComponent) => {
       this.#listContainer.replaceChild(newComponent, oldComponent);
@@ -45,11 +38,6 @@ export default class ListPresenter {
         document.removeEventListener('keydown', onEscKeyDown);
       }
     };
-
-    // pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
-    //   replaceComponents(pontFormComponent.element, pointComponent.element);
-    //   document.addEventListener('keydown', onEscKeyDown);
-    // });
 
     pointComponent.setClickHandler(() => {
       replaceComponents(pontFormComponent.element, pointComponent.element);

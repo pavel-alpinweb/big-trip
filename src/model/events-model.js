@@ -1,7 +1,8 @@
 import {generateDestination, generatePoint, generateOffersByTypeArray} from '../mock/mock.js';
+import dayjs from 'dayjs';
+import {DATES, POINTS_NAMES} from '../utils/constants';
 
 export default class EventsModel {
-  #destination = generateDestination();
   #localPoint = {
     'base_price': '',
     'date_from': '',
@@ -12,20 +13,12 @@ export default class EventsModel {
     'type': 'taxi'
   };
 
-  #point = generatePoint(this.destination);
-  #points = Array.from({length: 5}, () => generatePoint(generateDestination()));
+  #points = Array.from(DATES, ([dateFrom, dateTo]) => generatePoint(dateFrom, dateTo));
   #offersByType = generateOffersByTypeArray();
-
-  get destination() {
-    return this.#destination;
-  }
+  #destinations = Array.from(POINTS_NAMES, (index, name) => generateDestination(index, name));
 
   get localPoint() {
     return this.#localPoint;
-  }
-
-  get point() {
-    return this.#point;
   }
 
   get points() {
@@ -34,6 +27,54 @@ export default class EventsModel {
 
   get offersByType() {
     return this.#offersByType;
+  }
+
+  get pastPoints() {
+    const currentDate = dayjs(new Date());
+    return this.#points.filter((point) => currentDate.diff(point.date_from, 'd') > 0);
+  }
+
+  get futurePoints() {
+    const currentDate = dayjs(new Date());
+    return this.#points.filter((point) => currentDate.diff(point.date_from, 'd') < 0);
+  }
+
+  get totalPrice() {
+    return this.points.reduce((prev, curr) => {
+      const totalBasePrice = prev + Number(curr.base_price);
+      const offersList = this.getOffersList(curr.type, curr.offers);
+      return offersList.reduce((p, c) => p + c.price, totalBasePrice);
+    }, 0);
+  }
+
+  get pointsNames() {
+    const allNames = [];
+    for (const point of this.points) {
+      allNames.push(this.getDestinationById(point.destination).name);
+    }
+    if (allNames.length > 3) {
+      allNames.splice(1, allNames.length - 2, '...');
+    }
+    return allNames.join('&nbsp;&mdash;&nbsp;');
+  }
+
+  get tripDuring() {
+    const startPoint = this.points[0];
+    const finishPoint = this.points[this.points.length - 1];
+
+    const startDate = dayjs(startPoint.date_from).format('D');
+    const startMonth = dayjs(startPoint.date_from).format('MMM');
+
+    const finishDate = dayjs(finishPoint.date_to).format('D');
+    const finishMonth = dayjs(finishPoint.date_to).format('MMM');
+
+    if (startMonth === finishMonth && startDate === finishDate) {
+      return `${startMonth} ${startDate}`;
+    } else if(startMonth === finishMonth) {
+      return `${startMonth} ${startDate} &mdash; ${finishDate}`;
+    } else {
+      return `${startMonth} ${startDate} &mdash; ${finishMonth} ${finishDate}`;
+    }
   }
 
   getOffersList = (type, idsList) => {
@@ -48,4 +89,6 @@ export default class EventsModel {
     }
     return resultArray;
   };
+
+  getDestinationById = (id) => this.#destinations.find((item) => item.id === id);
 }
