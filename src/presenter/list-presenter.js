@@ -1,4 +1,4 @@
-import {render, RenderPosition} from '../framework/render.js';
+import {render, remove, RenderPosition} from '../framework/render.js';
 import PointForm from '../view/point-form.js';
 import Point from '../view/point.js';
 import EmptyMessage from '../view/empty-message';
@@ -11,6 +11,7 @@ export default class ListPresenter {
   #currentOffersArray = [];
   #headerPresenter = null;
   #headerContainer = null;
+  #newPointFormComponent = null;
   #openNewPointForm = null;
   constructor(eventsModel, listContainer) {
     this.#eventsModel = eventsModel;
@@ -18,7 +19,12 @@ export default class ListPresenter {
     this.#newPoint = this.#eventsModel.localPoint;
     this.#currentOffersArray = this.#eventsModel.getOffersList(this.#newPoint.type, this.#newPoint.offers);
     this.#openNewPointForm = () => {
-      render(new PointForm({point: this.#newPoint, offersArray: this.#currentOffersArray}), this.#listContainer, RenderPosition.AFTERBEGIN);
+      this.#newPointFormComponent = new PointForm({point: this.#newPoint, offersArray: this.#currentOffersArray});
+      this.#newPointFormComponent.setClickHandler(() => {
+        this.#newPointFormComponent.deleteClickHandler();
+        remove(this.#newPointFormComponent);
+      });
+      render(this.#newPointFormComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
     };
     this.#headerContainer = document.querySelector('.trip-main');
     this.#headerPresenter = new HeaderPresenter(this.#eventsModel, this.#headerContainer, this.#openNewPointForm);

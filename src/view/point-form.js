@@ -167,6 +167,11 @@ export default class PointForm extends AbstractView{
     this._callback.click();
   };
 
+  deleteClickHandler = () => {
+    this.element.querySelector('.event__reset-btn').removeEventListener('click', this._callback.click);
+    this._callback.click = null;
+  };
+
   #submitHandler = (evt) => {
     evt.preventDefault();
     this._callback.submit();
