@@ -2,17 +2,22 @@ import {render, RenderPosition} from '../framework/render.js';
 import PointForm from '../view/point-form.js';
 import Point from '../view/point.js';
 import EmptyMessage from '../view/empty-message';
+import HeaderPresenter from './header-presenter';
 
 export default class ListPresenter {
   #eventsModel = null;
   #listContainer = null;
   #newPoint = null;
   #currentOffersArray = [];
+  #headerPresenter = null;
+  #headerContainer = null;
   constructor(eventsModel, listContainer) {
     this.#eventsModel = eventsModel;
     this.#listContainer = listContainer;
     this.#newPoint = this.#eventsModel.localPoint;
     this.#currentOffersArray = this.#eventsModel.getOffersList(this.#newPoint.type, this.#newPoint.offers);
+    this.#headerContainer = document.querySelector('.trip-main');
+    this.#headerPresenter = new HeaderPresenter(this.#eventsModel, this.#headerContainer);
   }
 
   editNewPoint() {
@@ -20,6 +25,7 @@ export default class ListPresenter {
   }
 
   init() {
+    this.#headerPresenter.init();
     if (this.#eventsModel.points.length === 0) {
       render(new EmptyMessage, this.#listContainer);
     } else {
