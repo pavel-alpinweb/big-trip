@@ -13,7 +13,11 @@ export default class HeaderPresenter {
   }
 
   init() {
-    render(new NewEventButton(), this.#headerContainer);
+    const buttonComponent = new NewEventButton();
+    buttonComponent.setClickHandler(() => {
+      this.#openNewPointForm();
+    });
+    render(buttonComponent, this.#headerContainer);
     render(new TripInfo({totalPrice: this.#eventsModel.totalPrice, pointsNames: this.#eventsModel.pointsNames, tripDuring: this.#eventsModel.tripDuring}), this.#headerContainer, RenderPosition.AFTERBEGIN);
   }
 }

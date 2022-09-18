@@ -12,4 +12,14 @@ export default class NewEventButton extends AbstractView{
   get template() {
     return createNewEventButtonTemplate();
   }
+
+  setClickHandler = (callback) => {
+    this._callback.click = callback;
+    this.element.addEventListener('click', this.#clickHandler);
+  };
+
+  #clickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.click();
+  };
 }
