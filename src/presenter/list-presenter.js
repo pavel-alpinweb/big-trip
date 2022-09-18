@@ -38,7 +38,12 @@ export default class ListPresenter {
       for (const point of this.#eventsModel.points) {
         const offersArray = this.#eventsModel.getOffersList(point.type, point.offers);
         const destination = this.#eventsModel.getDestinationById(point.destination);
-        const pointPresenter = new PointPresenter(this.#listContainer, point, offersArray, destination);
+        const pointPresenter = new PointPresenter({
+          listContainer: this.#listContainer,
+          point,
+          offersArray,
+          destination
+        });
         pointPresenter.init();
       }
     }

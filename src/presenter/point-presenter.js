@@ -6,7 +6,7 @@ export default class PointPresenter {
   #listContainer = null;
   #pointComponent = null;
   #pontFormComponent = null;
-  constructor(listContainer, point, offersArray, destination) {
+  constructor({listContainer, point, offersArray, destination}) {
     this.#listContainer = listContainer;
     this.#pointComponent = new Point({point, offersArray, destination});
     this.#pontFormComponent = new PointForm({point, offersArray, destination});
