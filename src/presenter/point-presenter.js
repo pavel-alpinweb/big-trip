@@ -7,10 +7,12 @@ export default class PointPresenter {
   #listContainer = null;
   #pointComponent = null;
   #pontFormComponent = null;
-  constructor({listContainer, point, offersArray, destination}) {
+  #eventsModel = null;
+  constructor({listContainer, point, offersArray, destination, eventsModel}) {
     this.#listContainer = listContainer;
     this.#pointComponent = new Point({point, offersArray, destination});
     this.#pontFormComponent = new PointForm({point, offersArray, destination});
+    this.#eventsModel = eventsModel;
   }
 
   #renderPoint() {
@@ -32,9 +34,11 @@ export default class PointPresenter {
     });
 
     this.#pointComponent.setClickFavoriteHandler(() => {
-      const result = updatePoint({...this.#pointComponent.props.point, 'is_favorite': !this.#pointComponent.props.point['is_favorite']});
-      // eslint-disable-next-line no-console
-      console.log('point', result);
+      const result = updatePoint({
+        ...this.#pointComponent.props.point,
+        'is_favorite': !this.#pointComponent.props.point['is_favorite']
+      });
+      this.#eventsModel.updateCurrentPoint(result);
     });
 
     this.#pontFormComponent.setClickHandler(() => {

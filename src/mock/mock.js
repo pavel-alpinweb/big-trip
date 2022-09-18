@@ -1,3 +1,4 @@
+import {nanoid} from 'nanoid';
 import {TYPES} from '../utils/constants.js';
 import {getRandomInteger} from '../utils/helpers.js';
 
@@ -31,7 +32,7 @@ export const generatePoint = (dateFrom, dateTo) => ({
   'date_from': dateFrom,
   'date_to': dateTo,
   'destination': getRandomInteger(0, 2),
-  'id': '0',
+  'id': nanoid(),
   'is_favorite': false,
   'offers': [0, 2],
   'type': Object.values(TYPES)[getRandomInteger(0, Object.values(TYPES).length - 1)],

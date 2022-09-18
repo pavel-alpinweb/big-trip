@@ -42,7 +42,8 @@ export default class ListPresenter {
           listContainer: this.#listContainer,
           point,
           offersArray,
-          destination
+          destination,
+          eventsModel: this.#eventsModel,
         });
         pointPresenter.init();
       }
