@@ -1,5 +1,6 @@
 import {render, RenderPosition} from '../framework/render.js';
 import TripInfo from '../view/trip-info.js';
+import NewEventButton from '../view/new-event-button.js';
 
 export default class HeaderPresenter {
   #eventsModel = null;
@@ -12,6 +13,7 @@ export default class HeaderPresenter {
   }
 
   init() {
+    render(new NewEventButton(), this.#headerContainer);
     render(new TripInfo({totalPrice: this.#eventsModel.totalPrice, pointsNames: this.#eventsModel.pointsNames, tripDuring: this.#eventsModel.tripDuring}), this.#headerContainer, RenderPosition.AFTERBEGIN);
   }
 }
