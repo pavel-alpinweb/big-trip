@@ -30,6 +30,11 @@ export default class PointPresenter {
       document.addEventListener('keydown', onEscKeyDown);
     });
 
+    this.#pointComponent.setClickFavoriteHandler(() => {
+      // eslint-disable-next-line no-console
+      console.log('point', this.#pointComponent.props.point);
+    });
+
     this.#pontFormComponent.setClickHandler(() => {
       replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
     });
