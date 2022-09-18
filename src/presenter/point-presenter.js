@@ -15,23 +15,15 @@ export default class PointPresenter {
     this.#eventsModel = eventsModel;
   }
 
+  replaceComponents(newComponent,oldComponent) {
+    this.#listContainer.replaceChild(newComponent, oldComponent);
+  }
+
+  resetView() {
+    this.replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
+  }
+
   #renderPoint() {
-    const replaceComponents = (newComponent,oldComponent) => {
-      this.#listContainer.replaceChild(newComponent, oldComponent);
-    };
-
-    const onEscKeyDown = (evt) => {
-      if (evt.key === 'Escape' || evt.key === 'Esc') {
-        evt.preventDefault();
-        replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
-    };
-
-    this.#pointComponent.setClickHandler(() => {
-      replaceComponents(this.#pontFormComponent.element, this.#pointComponent.element);
-      document.addEventListener('keydown', onEscKeyDown);
-    });
 
     this.#pointComponent.setClickFavoriteHandler(() => {
       const result = updatePoint({
@@ -41,12 +33,25 @@ export default class PointPresenter {
       this.#eventsModel.updateCurrentPoint(result);
     });
 
+    const onEscKeyDown = (evt) => {
+      if (evt.key === 'Escape' || evt.key === 'Esc') {
+        evt.preventDefault();
+        this.replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
+        document.removeEventListener('keydown', onEscKeyDown);
+      }
+    };
+
+    this.#pointComponent.setClickHandler(() => {
+      this.replaceComponents(this.#pontFormComponent.element, this.#pointComponent.element);
+      document.addEventListener('keydown', onEscKeyDown);
+    });
+
     this.#pontFormComponent.setClickHandler(() => {
-      replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
+      this.replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
     });
 
     this.#pontFormComponent.setSubmitHandler(() => {
-      replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
+      this.replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
     });
 
     render(this.#pointComponent, this.#listContainer);
