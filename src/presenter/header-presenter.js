@@ -4,9 +4,11 @@ import TripInfo from '../view/trip-info.js';
 export default class HeaderPresenter {
   #eventsModel = null;
   #headerContainer = null;
-  constructor(eventsModel, headerContainer) {
+  #openNewPointForm = null;
+  constructor(eventsModel, headerContainer, openNewPointForm) {
     this.#eventsModel = eventsModel;
     this.#headerContainer = headerContainer;
+    this.#openNewPointForm = openNewPointForm;
   }
 
   init() {

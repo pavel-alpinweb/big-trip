@@ -11,17 +11,17 @@ export default class ListPresenter {
   #currentOffersArray = [];
   #headerPresenter = null;
   #headerContainer = null;
+  #openNewPointForm = null;
   constructor(eventsModel, listContainer) {
     this.#eventsModel = eventsModel;
     this.#listContainer = listContainer;
     this.#newPoint = this.#eventsModel.localPoint;
     this.#currentOffersArray = this.#eventsModel.getOffersList(this.#newPoint.type, this.#newPoint.offers);
+    this.#openNewPointForm = () => {
+      render(new PointForm({point: this.#newPoint, offersArray: this.#currentOffersArray}), this.#listContainer, RenderPosition.AFTERBEGIN);
+    };
     this.#headerContainer = document.querySelector('.trip-main');
-    this.#headerPresenter = new HeaderPresenter(this.#eventsModel, this.#headerContainer);
-  }
-
-  editNewPoint() {
-    render(new PointForm({point: this.#newPoint, offersArray: this.#currentOffersArray}), this.#listContainer, RenderPosition.AFTERBEGIN);
+    this.#headerPresenter = new HeaderPresenter(this.#eventsModel, this.#headerContainer, this.#openNewPointForm);
   }
 
   init() {
