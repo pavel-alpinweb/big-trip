@@ -36,3 +36,5 @@ export const generatePoint = (dateFrom, dateTo) => ({
   'offers': [0, 2],
   'type': Object.values(TYPES)[getRandomInteger(0, Object.values(TYPES).length - 1)],
 });
+
+export const updatePoint = (point) => point;

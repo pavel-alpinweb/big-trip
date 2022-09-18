@@ -1,4 +1,5 @@
 import {render} from '../framework/render.js';
+import {updatePoint} from '../mock/mock.js';
 import PointForm from '../view/point-form.js';
 import Point from '../view/point.js';
 
@@ -31,8 +32,9 @@ export default class PointPresenter {
     });
 
     this.#pointComponent.setClickFavoriteHandler(() => {
+      const result = updatePoint({...this.#pointComponent.props.point, 'is_favorite': !this.#pointComponent.props.point['is_favorite']});
       // eslint-disable-next-line no-console
-      console.log('point', this.#pointComponent.props.point);
+      console.log('point', result);
     });
 
     this.#pontFormComponent.setClickHandler(() => {
