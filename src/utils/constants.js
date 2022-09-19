@@ -23,3 +23,8 @@ export const DATES = [
   ['2022-03-02T10:00:00', '2022-03-02T16:00:00'],
   ['2022-12-24T20:00:00', '2022-12-24T15:00:00'],
 ];
+
+export const POINT_MODES = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
