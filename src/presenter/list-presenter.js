@@ -32,10 +32,6 @@ export default class ListPresenter {
     this.#headerPresenter = new HeaderPresenter(this.#eventsModel, this.#headerContainer, this.#openNewPointForm);
   }
 
-  // resetAllPointsView() {
-  //   this.#pointPresentersMap.forEach((presenter) => presenter.resetView());
-  // }
-
   init() {
     const resetAllPointsView = () => {
       this.#pointPresentersMap.forEach((presenter) => presenter.resetView());
