@@ -42,11 +42,13 @@ export default class EventsModel {
   }
 
   get pointsSortedByPrice() {
-    return this.#points.sort((pointA, pointB) => Number(pointB.base_price) - Number(pointA.base_price));
+    const points = [...this.#points];
+    return points.sort((pointA, pointB) => Number(pointB.base_price) - Number(pointA.base_price));
   }
 
-  get pointsSortedByDay() {
-    return this.#points.sort((pointA, pointB) => {
+  get pointsSortedByTime() {
+    const points = [...this.#points];
+    return points.sort((pointA, pointB) => {
       const dateFromA = dayjs(pointA['date_from']);
       const dateToA = dayjs(pointA['date_to']);
       const diffMillisecondsA = dateToA.diff(dateFromA, 'millisecond');
@@ -56,6 +58,16 @@ export default class EventsModel {
       const diffMillisecondsB = dateToB.diff(dateFromB, 'millisecond');
 
       return diffMillisecondsB - diffMillisecondsA;
+    });
+  }
+
+  get pointsSortedByDay() {
+    const points = [...this.#points];
+    return points.sort((pointA, pointB) => {
+      const dateFromA = dayjs(pointA['date_from']).valueOf();
+      const dateFromB = dayjs(pointB['date_from']).valueOf();
+
+      return dateFromA - dateFromB;
     });
   }
 

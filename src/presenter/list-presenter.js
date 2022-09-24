@@ -59,7 +59,7 @@ export default class ListPresenter {
     if (this.#eventsModel.points.length === 0) {
       render(new EmptyMessage, this.#listContainer);
     } else {
-      this.displayPoints(this.#eventsModel.points);
+      this.displayPoints(this.#eventsModel.pointsSortedByDay);
     }
   }
 }
