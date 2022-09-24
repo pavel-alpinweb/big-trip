@@ -12,8 +12,12 @@ export default class SortPresenter {
   }
 
   init() {
+    const sortElement = new Sort();
+    sortElement.setClickHandler((type) => {
+      console.log('sort type', type);
+    });
     if (this.#eventsModel.points.length > 0) {
-      render(new Sort, this.#listContainer, RenderPosition.AFTERBEGIN);
+      render(sortElement, this.#listContainer, RenderPosition.AFTERBEGIN);
     }
   }
 }
