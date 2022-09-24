@@ -1,5 +1,7 @@
 import {generateDestination, generatePoint, generateOffersByTypeArray} from '../mock/mock.js';
 import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+dayjs.extend(duration);
 import {DATES, POINTS_NAMES} from '../utils/constants';
 
 export default class EventsModel {
@@ -41,6 +43,20 @@ export default class EventsModel {
 
   get pointsSortedByPrice() {
     return this.#points.sort((pointA, pointB) => Number(pointB.base_price) - Number(pointA.base_price));
+  }
+
+  get pointsSortedByDay() {
+    return this.#points.sort((pointA, pointB) => {
+      const dateFromA = dayjs(pointA['date_from']);
+      const dateToA = dayjs(pointA['date_to']);
+      const diffMillisecondsA = dateToA.diff(dateFromA, 'millisecond');
+
+      const dateFromB = dayjs(pointB['date_from']);
+      const dateToB = dayjs(pointB['date_to']);
+      const diffMillisecondsB = dateToB.diff(dateFromB, 'millisecond');
+
+      return diffMillisecondsB - diffMillisecondsA;
+    });
   }
 
   get totalPrice() {
