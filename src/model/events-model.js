@@ -39,6 +39,10 @@ export default class EventsModel {
     return this.#points.filter((point) => currentDate.diff(point.date_from, 'd') < 0);
   }
 
+  get pointsSortedByPrice() {
+    return this.#points.sort((pointA, pointB) => Number(pointB.base_price) - Number(pointA.base_price));
+  }
+
   get totalPrice() {
     return this.points.reduce((prev, curr) => {
       const totalBasePrice = prev + Number(curr.base_price);
