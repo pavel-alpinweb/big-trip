@@ -10,10 +10,14 @@ export default class FiltersPresenter {
   }
 
   init() {
-    render(new Filters({
+    const filtersComponent = new Filters({
       allPointsNumber: this.#eventsModel.points.length,
       pastPointsNumber: this.#eventsModel.pastPoints.length,
       futurePointsNumber: this.#eventsModel.futurePoints.length,
-    }), this.#filtersContainer);
+    });
+    filtersComponent.setClickHandler((type) => {
+      console.log('filter type', type);
+    });
+    render(filtersComponent, this.#filtersContainer);
   }
 }
