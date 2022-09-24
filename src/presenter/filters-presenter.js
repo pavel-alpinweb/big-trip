@@ -4,9 +4,13 @@ import Filters from '../view/filters.js';
 export default class FiltersPresenter {
   #eventsModel = null;
   #filtersContainer = null;
-  constructor(eventsModel, filtersContainer) {
+  #clearPoints = null;
+  #displayPoints = null;
+  constructor({eventsModel, filtersContainer, clearPoints, displayPoints}) {
     this.#eventsModel = eventsModel;
     this.#filtersContainer = filtersContainer;
+    this.#clearPoints = clearPoints;
+    this.#displayPoints = displayPoints;
   }
 
   init() {
@@ -16,7 +20,8 @@ export default class FiltersPresenter {
       futurePointsNumber: this.#eventsModel.futurePoints.length,
     });
     filtersComponent.setClickHandler((type) => {
-      console.log('filter type', type);
+      this.#clearPoints();
+      this.#displayPoints(this.#eventsModel[type]);
     });
     render(filtersComponent, this.#filtersContainer);
   }

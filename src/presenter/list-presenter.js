@@ -3,16 +3,18 @@ import PointForm from '../view/point-form.js';
 import EmptyMessage from '../view/empty-message.js';
 import HeaderPresenter from './header-presenter.js';
 import PointPresenter from './point-presenter.js';
+import FiltersPresenter from './filters-presenter.js';
 
 export default class ListPresenter {
   #eventsModel = null;
   #listContainer = null;
   #newPoint = null;
   #currentOffersArray = [];
+  #filtersPresenter = null;
+  #filtersContainer = null;
   #headerPresenter = null;
   #headerContainer = null;
   #newPointFormComponent = null;
-  #openNewPointForm = null;
   #pointPresentersMap = new Map();
 
   constructor(eventsModel, listContainer) {
@@ -21,6 +23,7 @@ export default class ListPresenter {
     this.#newPoint = this.#eventsModel.localPoint;
     this.#currentOffersArray = this.#eventsModel.getOffersList(this.#newPoint.type, this.#newPoint.offers);
     this.#headerContainer = document.querySelector('.trip-main');
+    this.#filtersContainer = document.querySelector('.trip-controls__filters');
   }
 
   resetAllPointsView = () => {
@@ -61,6 +64,13 @@ export default class ListPresenter {
   init() {
     this.#headerPresenter = new HeaderPresenter(this.#eventsModel, this.#headerContainer, this.openNewPointForm);
     this.#headerPresenter.init();
+    this.#filtersPresenter = new FiltersPresenter({
+      eventsModel: this.#eventsModel,
+      filtersContainer: this.#filtersContainer,
+      clearPoints: this.clearPoints,
+      displayPoints: this.displayPoints,
+    });
+    this.#filtersPresenter.init();
     if (this.#eventsModel.points.length === 0) {
       render(new EmptyMessage, this.#listContainer);
     } else {
