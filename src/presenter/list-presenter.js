@@ -29,13 +29,23 @@ export default class ListPresenter {
       render(this.#newPointFormComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
     };
     this.#headerContainer = document.querySelector('.trip-main');
-    this.#headerPresenter = new HeaderPresenter(this.#eventsModel, this.#headerContainer, this.#openNewPointForm);
   }
 
+  resetAllPointsView = () => {
+    this.#pointPresentersMap.forEach((presenter) => presenter.resetView());
+  };
+
+  openNewPointForm = () => {
+    this.#newPointFormComponent = new PointForm({point: this.#newPoint, offersArray: this.#currentOffersArray});
+    this.#newPointFormComponent.setClickHandler(() => {
+      this.#newPointFormComponent.deleteClickHandler();
+      remove(this.#newPointFormComponent);
+    });
+    render(this.#newPointFormComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
+  };
+
   init() {
-    const resetAllPointsView = () => {
-      this.#pointPresentersMap.forEach((presenter) => presenter.resetView());
-    };
+    this.#headerPresenter = new HeaderPresenter(this.#eventsModel, this.#headerContainer, this.openNewPointForm);
     this.#headerPresenter.init();
     if (this.#eventsModel.points.length === 0) {
       render(new EmptyMessage, this.#listContainer);
@@ -49,7 +59,7 @@ export default class ListPresenter {
           offersArray,
           destination,
           eventsModel: this.#eventsModel,
-          reset: resetAllPointsView,
+          reset: this.resetAllPointsView,
         });
         this.#pointPresentersMap.set(point.id, pointPresenter);
         pointPresenter.init();
