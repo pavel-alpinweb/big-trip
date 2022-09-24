@@ -28,3 +28,15 @@ export const POINT_MODES = {
   DEFAULT: 'DEFAULT',
   EDITING: 'EDITING',
 };
+
+export const SORT_MODES = {
+  DAY: 'pointsSortedByDay',
+  TIME: 'pointsSortedByTime',
+  PRICE: 'pointsSortedByPrice',
+};
+
+export const FILTERS_MODES = {
+  ALL: 'points',
+  FUTURE: 'futurePoints',
+  PAST: 'pastPoints',
+};
