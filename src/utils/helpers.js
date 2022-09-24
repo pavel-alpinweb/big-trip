@@ -36,4 +36,8 @@ const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
-export {formatEventDate, formatEventTime, deferenceBetweenDays, typeName, formatEventDateTime, getRandomInteger};
+function getKeyByValue(object, value) {
+  return Object.keys(object).find((key) => object[key] === value);
+}
+
+export {formatEventDate, formatEventTime, deferenceBetweenDays, typeName, formatEventDateTime, getRandomInteger, getKeyByValue};

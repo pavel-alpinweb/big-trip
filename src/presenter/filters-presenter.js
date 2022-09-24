@@ -1,11 +1,14 @@
 import {render} from '../framework/render.js';
 import Filters from '../view/filters.js';
+import {FILTERS_MODES} from '../utils/constants.js';
+import {getKeyByValue} from '../utils/helpers.js';
 
 export default class FiltersPresenter {
   #eventsModel = null;
   #filtersContainer = null;
   #clearPoints = null;
   #displayPoints = null;
+  #activeFilter = FILTERS_MODES.ALL;
   constructor({eventsModel, filtersContainer, clearPoints, displayPoints}) {
     this.#eventsModel = eventsModel;
     this.#filtersContainer = filtersContainer;
@@ -20,8 +23,11 @@ export default class FiltersPresenter {
       futurePointsNumber: this.#eventsModel.futurePoints.length,
     });
     filtersComponent.setClickHandler((type) => {
-      this.#clearPoints();
-      this.#displayPoints(this.#eventsModel[type]);
+      if (this.#activeFilter !== FILTERS_MODES[getKeyByValue(FILTERS_MODES, type)]) {
+        this.#clearPoints();
+        this.#displayPoints(this.#eventsModel[type]);
+        this.#activeFilter = FILTERS_MODES[getKeyByValue(FILTERS_MODES, type)];
+      }
     });
     render(filtersComponent, this.#filtersContainer);
   }
