@@ -1,4 +1,4 @@
-import {render} from '../framework/render.js';
+import {render, remove} from '../framework/render.js';
 import {updatePoint} from '../mock/mock.js';
 import {POINT_MODES} from '../utils/constants.js';
 import PointForm from '../view/point-form.js';
@@ -71,5 +71,10 @@ export default class PointPresenter {
 
   init() {
     this.#renderPoint();
+  }
+
+  destroy() {
+    remove(this.#pointComponent);
+    remove(this.#pontFormComponent);
   }
 }

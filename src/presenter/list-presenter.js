@@ -53,6 +53,11 @@ export default class ListPresenter {
     }
   };
 
+  clearPoints = () => {
+    this.#pointPresentersMap.forEach((pointPresenter) => pointPresenter.destroy());
+    this.#pointPresentersMap.clear();
+  };
+
   init() {
     this.#headerPresenter = new HeaderPresenter(this.#eventsModel, this.#headerContainer, this.openNewPointForm);
     this.#headerPresenter.init();
