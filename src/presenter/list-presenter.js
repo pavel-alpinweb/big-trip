@@ -4,6 +4,7 @@ import EmptyMessage from '../view/empty-message.js';
 import HeaderPresenter from './header-presenter.js';
 import PointPresenter from './point-presenter.js';
 import FiltersPresenter from './filters-presenter.js';
+import SortPresenter from './sort-presenter';
 
 export default class ListPresenter {
   #eventsModel = null;
@@ -12,6 +13,8 @@ export default class ListPresenter {
   #currentOffersArray = [];
   #filtersPresenter = null;
   #filtersContainer = null;
+  #sortPresenter = null;
+  #sortContainer = null;
   #headerPresenter = null;
   #headerContainer = null;
   #newPointFormComponent = null;
@@ -24,6 +27,7 @@ export default class ListPresenter {
     this.#currentOffersArray = this.#eventsModel.getOffersList(this.#newPoint.type, this.#newPoint.offers);
     this.#headerContainer = document.querySelector('.trip-main');
     this.#filtersContainer = document.querySelector('.trip-controls__filters');
+    this.#sortContainer = document.querySelector('.trip-events__list');
   }
 
   resetAllPointsView = () => {
@@ -71,6 +75,13 @@ export default class ListPresenter {
       displayPoints: this.displayPoints,
     });
     this.#filtersPresenter.init();
+    this.#sortPresenter = new SortPresenter({
+      eventsModel: this.#eventsModel,
+      sortContainer: this.#sortContainer,
+      clearPoints: this.clearPoints,
+      displayPoints: this.displayPoints,
+    });
+    this.#sortPresenter.init();
     if (this.#eventsModel.points.length === 0) {
       render(new EmptyMessage, this.#listContainer);
     } else {
