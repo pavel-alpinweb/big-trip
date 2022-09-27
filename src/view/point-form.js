@@ -147,6 +147,7 @@ export default class PointForm extends AbstractStatefulView{
     super();
     this.props = props;
     this._state = {...this.props};
+    this.#setInnerHandlers();
   }
 
   get template() {
@@ -182,4 +183,14 @@ export default class PointForm extends AbstractStatefulView{
     evt.preventDefault();
     this._callback.submit();
   };
+
+  #setInnerHandlers() {
+    const typeInputsElements = this.element.querySelectorAll('.event__type-input');
+    typeInputsElements.forEach((el) => {
+      el.addEventListener('change', (event) => {
+        // eslint-disable-next-line no-console
+        console.log('change', event.target.value);
+      });
+    });
+  }
 }
