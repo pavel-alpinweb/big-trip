@@ -27,6 +27,10 @@ export default class EventsModel {
     return this.#points;
   }
 
+  get destinations() {
+    return this.#destinations;
+  }
+
   get offersByType() {
     return this.#offersByType;
   }

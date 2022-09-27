@@ -36,6 +36,19 @@ const createDestinationTemplate = (destination) => {
   `;}
 };
 
+const createDestinationOptionsTemplate = (destinationsList) => {
+  if (destinationsList.length <= 0) {return '';}
+  else {
+    return `
+      <datalist id="destination-list-1">
+        ${destinationsList.map(({name}) => `
+          <option value="${name}"></option>
+        `).join('')}
+      </datalist>
+    `;
+  }
+};
+
 const createPointFormTemplate = (props) => `
 <li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -104,11 +117,7 @@ const createPointFormTemplate = (props) => `
           ${typeName(props.point.type)}
         </label>
         <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${props.destination?.name ?? ''}" list="destination-list-1">
-        <datalist id="destination-list-1">
-          <option value="Amsterdam"></option>
-          <option value="Geneva"></option>
-          <option value="Chamonix"></option>
-        </datalist>
+        ${createDestinationOptionsTemplate(props.destinationsList)}
       </div>
 
       <div class="event__field-group  event__field-group--time">
@@ -186,10 +195,10 @@ export default class PointForm extends AbstractStatefulView{
     this.element.querySelector('form').addEventListener('submit', this.#submitHandler);
   };
 
-  _restoreHandlers() {
+  _restoreHandlers = () => {
     // eslint-disable-next-line no-console
     console.log('Restore Handlers');
-  }
+  };
 
   #clickHandler = (evt) => {
     evt.preventDefault();

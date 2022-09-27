@@ -36,7 +36,11 @@ export default class ListPresenter {
 
   openNewPointForm = () => {
     this.#newPointFormComponent = new PointForm({
-      props: {point: this.#newPoint, offersArray: this.#currentOffersArray},
+      props: {
+        point: this.#newPoint,
+        offersArray: this.#currentOffersArray,
+        destinationsList: this.#eventsModel.destinations,
+      },
       getOffersList: this.#eventsModel.getOffersList,
     });
     this.#newPointFormComponent.setClickHandler(() => {
@@ -57,6 +61,7 @@ export default class ListPresenter {
         destination,
         eventsModel: this.#eventsModel,
         reset: this.resetAllPointsView,
+        destinationsList: this.#eventsModel.destinations,
       });
       this.#pointPresentersMap.set(point.id, pointPresenter);
       pointPresenter.init();
