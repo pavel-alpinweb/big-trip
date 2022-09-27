@@ -248,8 +248,9 @@ export default class PointForm extends AbstractStatefulView{
   };
 
   _restoreHandlers = () => {
-    // eslint-disable-next-line no-console
-    console.log('Restore Handlers');
+    this.#setInnerHandlers();
+    this.setClickHandler(this._callback.click);
+    this.setSubmitHandler(this._callback.submit);
   };
 
   #clickHandler = (evt) => {
