@@ -1,5 +1,5 @@
-import AbstractView from '../framework/view/abstract-view';
-import {typeName, formatEventDateTime} from '../utils/helpers';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
+import {typeName, formatEventDateTime} from '../utils/helpers.js';
 
 const createOffersListTemplate = (offers) => {
   if (offers.length <= 0) {return '';}
@@ -142,14 +142,15 @@ const createPointFormTemplate = (props) => `
 </li>
 `;
 
-export default class PointForm extends AbstractView{
+export default class PointForm extends AbstractStatefulView{
   constructor(props) {
     super();
     this.props = props;
+    this._state = {...this.props};
   }
 
   get template() {
-    return createPointFormTemplate(this.props);
+    return createPointFormTemplate(this._state);
   }
 
   setClickHandler = (callback) => {
@@ -161,6 +162,11 @@ export default class PointForm extends AbstractView{
     this._callback.submit = callback;
     this.element.querySelector('form').addEventListener('submit', this.#submitHandler);
   };
+
+  _restoreHandlers() {
+    // eslint-disable-next-line no-console
+    console.log('Restore Handlers');
+  }
 
   #clickHandler = (evt) => {
     evt.preventDefault();
