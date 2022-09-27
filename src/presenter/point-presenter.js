@@ -13,9 +13,12 @@ export default class PointPresenter {
   #mode = POINT_MODES.DEFAULT;
   constructor({listContainer, point, offersArray, destination, eventsModel, reset}) {
     this.#listContainer = listContainer;
-    this.#pointComponent = new Point({point, offersArray, destination});
-    this.#pontFormComponent = new PointForm({point, offersArray, destination});
     this.#eventsModel = eventsModel;
+    this.#pointComponent = new Point({point, offersArray, destination});
+    this.#pontFormComponent = new PointForm({
+      props: {point, offersArray, destination},
+      getOffersList: this.#eventsModel.getOffersList,
+    });
     this.#resetView = reset;
   }
 

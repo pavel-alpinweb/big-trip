@@ -35,7 +35,10 @@ export default class ListPresenter {
   };
 
   openNewPointForm = () => {
-    this.#newPointFormComponent = new PointForm({point: this.#newPoint, offersArray: this.#currentOffersArray});
+    this.#newPointFormComponent = new PointForm({
+      props: {point: this.#newPoint, offersArray: this.#currentOffersArray},
+      getOffersList: this.#eventsModel.getOffersList,
+    });
     this.#newPointFormComponent.setClickHandler(() => {
       this.#newPointFormComponent.deleteClickHandler();
       remove(this.#newPointFormComponent);
