@@ -1,14 +1,22 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {typeName, formatEventDateTime} from '../utils/helpers.js';
 
-const createOffersListTemplate = (offers) => {
+const isChecked = (id, offersIds) => offersIds.includes(id) ? 'checked' : '';
+
+const createOffersListTemplate = (offers, offersIds) => {
   if (offers.length <= 0) {return '';}
   else {return `
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
     <div class="event__available-offers">
         ${offers.map(({id, title, price}) => `
         <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${id}" type="checkbox" name="event-offer-luggage">
+            <input
+                class="event__offer-checkbox  visually-hidden"
+                id="event-offer-luggage-${id}"
+                type="checkbox"
+                name="event-offer-luggage"
+                ${isChecked(id, offersIds)}
+            >
             <label class="event__offer-label" for="event-offer-luggage-${id}">
               <span class="event__offer-title">${title}</span>
               &plus;&euro;&nbsp;
@@ -149,7 +157,7 @@ const createPointFormTemplate = (props) => `
     <section class="event__details">
       <section class="event__section  event__section--offers">
 
-        ${createOffersListTemplate(props.offersArray)}
+        ${createOffersListTemplate(props.offersArray, props.point.offers)}
       </section>
 
       ${createDestinationTemplate(props.destination)}
@@ -161,14 +169,16 @@ const createPointFormTemplate = (props) => `
 export default class PointForm extends AbstractStatefulView{
   #getOffersList = null;
   #getDestinationByName = null;
+  #getOffersListByType = null;
 
-  constructor({props, getOffersList, getDestinationByName}) {
+  constructor({props, getOffersList, getDestinationByName, getOffersListByType}) {
     super();
     this.props = props;
     this._state = {...this.props};
     this.#setInnerHandlers();
     this.#getOffersList = getOffersList;
     this.#getDestinationByName = getDestinationByName;
+    this.#getOffersListByType = getOffersListByType;
   }
 
   get template() {
@@ -191,9 +201,10 @@ export default class PointForm extends AbstractStatefulView{
     this.updateElement({
       point: {
         ...this._state.point,
+        offers: [],
         type,
       },
-      offersArray: this.#getOffersList(type, this._state.point.offers),
+      offersArray: this.#getOffersListByType(type),
     });
   }
 

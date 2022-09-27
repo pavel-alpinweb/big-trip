@@ -126,6 +126,8 @@ export default class EventsModel {
     return resultArray;
   };
 
+  getOffersListByType = (type) => this.offers.find((item) => item.type === type).offers;
+
   getDestinationById = (id) => this.#destinations.find((item) => item.id === id);
 
   getDestinationByName = (name) => this.#destinations.find((item) => item.name === name);
