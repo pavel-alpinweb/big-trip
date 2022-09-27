@@ -182,6 +182,9 @@ export default class PointForm extends AbstractStatefulView{
         this.#changePointType(event.target.value);
       });
     });
+    this.element.querySelector('#event-destination-1').addEventListener('change', (event) => {
+      this.#changePointDestination(event.target.value);
+    });
   }
 
   #changePointType(type) {
@@ -191,6 +194,12 @@ export default class PointForm extends AbstractStatefulView{
         type,
       },
       offersArray: this.#getOffersList(type, this._state.point.offers),
+    });
+  }
+
+  #changePointDestination(name) {
+    this.updateElement({
+      destination: this.#getDestinationByName(name),
     });
   }
 
