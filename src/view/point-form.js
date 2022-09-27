@@ -167,17 +167,13 @@ export default class PointForm extends AbstractStatefulView{
   }
 
   #changePointType(type) {
-    // eslint-disable-next-line no-console
-    console.log('_state', this._state);
-    this._setState({
+    this.updateElement({
       point: {
         ...this._state.point,
         type,
       },
       offersArray: this.#getOffersList(type, this._state.point.offers),
     });
-    // eslint-disable-next-line no-console
-    console.log('_setState', this._state);
   }
 
   setClickHandler = (callback) => {
