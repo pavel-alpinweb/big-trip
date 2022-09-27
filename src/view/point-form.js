@@ -15,6 +15,7 @@ const createOffersListTemplate = (offers, offersIds) => {
                 id="event-offer-luggage-${id}"
                 type="checkbox"
                 name="event-offer-luggage"
+                value="${id}"
                 ${isChecked(id, offersIds)}
             >
             <label class="event__offer-label" for="event-offer-luggage-${id}">
@@ -195,6 +196,12 @@ export default class PointForm extends AbstractStatefulView{
     this.element.querySelector('#event-destination-1').addEventListener('change', (event) => {
       this.#changePointDestination(event.target.value);
     });
+    const inputCheckBoxes = this.element.querySelectorAll('.event__offer-checkbox');
+    inputCheckBoxes.forEach((el) => {
+      el.addEventListener('change', (event) => {
+        this.#changePointOffersList(event.target.value);
+      });
+    });
   }
 
   #changePointType(type) {
@@ -205,6 +212,22 @@ export default class PointForm extends AbstractStatefulView{
         type,
       },
       offersArray: this.#getOffersListByType(type),
+    });
+  }
+
+  #changePointOffersList(id) {
+    const idIndex = this._state.point.offers.indexOf(Number(id));
+    const offersArray = [...this._state.point.offers];
+    if (idIndex > -1) {
+      offersArray.splice(idIndex, 1);
+    } else {
+      offersArray.push(Number(id));
+    }
+    this._setState({
+      point: {
+        ...this._state.point,
+        offers: offersArray,
+      },
     });
   }
 
