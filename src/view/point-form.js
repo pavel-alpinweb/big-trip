@@ -154,6 +154,28 @@ export default class PointForm extends AbstractStatefulView{
     return createPointFormTemplate(this._state);
   }
 
+  #setInnerHandlers() {
+    const typeInputsElements = this.element.querySelectorAll('.event__type-input');
+    typeInputsElements.forEach((el) => {
+      el.addEventListener('change', (event) => {
+        this.#changePointType(event.target.value);
+      });
+    });
+  }
+
+  #changePointType(type) {
+    // eslint-disable-next-line no-console
+    console.log('_state', this._state);
+    this._setState({
+      point: {
+        ...this._state.point,
+        type,
+      },
+    });
+    // eslint-disable-next-line no-console
+    console.log('_setState', this._state);
+  }
+
   setClickHandler = (callback) => {
     this._callback.click = callback;
     this.element.querySelector('.event__reset-btn').addEventListener('click', this.#clickHandler);
@@ -183,14 +205,4 @@ export default class PointForm extends AbstractStatefulView{
     evt.preventDefault();
     this._callback.submit();
   };
-
-  #setInnerHandlers() {
-    const typeInputsElements = this.element.querySelectorAll('.event__type-input');
-    typeInputsElements.forEach((el) => {
-      el.addEventListener('change', (event) => {
-        // eslint-disable-next-line no-console
-        console.log('change', event.target.value);
-      });
-    });
-  }
 }
