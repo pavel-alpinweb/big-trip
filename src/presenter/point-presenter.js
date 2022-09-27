@@ -17,7 +17,7 @@ export default class PointPresenter {
     this.#pointComponent = new Point({point, offersArray, destination});
     this.#pontFormComponent = new PointForm({
       props: {point, offersArray, destination, destinationsList},
-      getOffersList: this.#eventsModel.getOffersList,
+      getOffersList: this.#eventsModel.getOffersListByIds,
       getDestinationByName: this.#eventsModel.getDestinationByName,
     });
     this.#resetView = reset;

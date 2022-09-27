@@ -16,7 +16,7 @@ export default class EventsModel {
   };
 
   #points = Array.from(DATES, ([dateFrom, dateTo]) => generatePoint(dateFrom, dateTo));
-  #offersByType = generateOffersByTypeArray();
+  #offers = generateOffersByTypeArray();
   #destinations = Array.from(POINTS_NAMES, (index, name) => generateDestination(index, name));
 
   get localPoint() {
@@ -31,8 +31,8 @@ export default class EventsModel {
     return this.#destinations;
   }
 
-  get offersByType() {
-    return this.#offersByType;
+  get offers() {
+    return this.#offers;
   }
 
   get pastPoints() {
@@ -78,7 +78,7 @@ export default class EventsModel {
   get totalPrice() {
     return this.points.reduce((prev, curr) => {
       const totalBasePrice = prev + Number(curr.base_price);
-      const offersList = this.getOffersList(curr.type, curr.offers);
+      const offersList = this.getOffersListByIds(curr.type, curr.offers);
       return offersList.reduce((p, c) => p + c.price, totalBasePrice);
     }, 0);
   }
@@ -113,9 +113,9 @@ export default class EventsModel {
     }
   }
 
-  getOffersList = (type, idsList) => {
+  getOffersListByIds = (type, idsList) => {
     const resultArray = [];
-    const currentType = this.offersByType.find((item) => item.type === type);
+    const currentType = this.offers.find((item) => item.type === type);
 
     for (const id of idsList) {
       const offer = currentType.offers.find((item) => item.id === id);
