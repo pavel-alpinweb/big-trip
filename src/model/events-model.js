@@ -128,6 +128,8 @@ export default class EventsModel {
 
   getDestinationById = (id) => this.#destinations.find((item) => item.id === id);
 
+  getDestinationByName = (name) => this.#destinations.find((item) => item.name === name);
+
   updateCurrentPoint(updatedPoint) {
     const index = this.#points.findIndex((point) => point.id === updatedPoint.id);
     this.#points.splice(index, 1, updatedPoint);

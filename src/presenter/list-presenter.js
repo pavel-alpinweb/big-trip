@@ -42,6 +42,7 @@ export default class ListPresenter {
         destinationsList: this.#eventsModel.destinations,
       },
       getOffersList: this.#eventsModel.getOffersList,
+      getDestinationByName: this.#eventsModel.getDestinationByName,
     });
     this.#newPointFormComponent.setClickHandler(() => {
       this.#newPointFormComponent.deleteClickHandler();

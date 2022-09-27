@@ -116,7 +116,14 @@ const createPointFormTemplate = (props) => `
         <label class="event__label  event__type-output" for="event-destination-1">
           ${typeName(props.point.type)}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${props.destination?.name ?? ''}" list="destination-list-1">
+        <input
+            class="event__input  event__input--destination"
+            id="event-destination-1"
+            type="text"
+            name="event-destination"
+            value="${props.destination?.name ?? ''}"
+            list="destination-list-1"
+        >
         ${createDestinationOptionsTemplate(props.destinationsList)}
       </div>
 
@@ -153,13 +160,15 @@ const createPointFormTemplate = (props) => `
 
 export default class PointForm extends AbstractStatefulView{
   #getOffersList = null;
+  #getDestinationByName = null;
 
-  constructor({props, getOffersList}) {
+  constructor({props, getOffersList, getDestinationByName}) {
     super();
     this.props = props;
     this._state = {...this.props};
     this.#setInnerHandlers();
     this.#getOffersList = getOffersList;
+    this.#getDestinationByName = getDestinationByName;
   }
 
   get template() {
