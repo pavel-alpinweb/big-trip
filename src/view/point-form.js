@@ -292,6 +292,7 @@ export default class PointForm extends AbstractStatefulView{
       {
         dateFormat: 'j F',
         defaultDate: new Date(this._state.point.date_from),
+        onChange: this.#dateFromChangeHandler,
       },
     );
     this.#toDatepicker = flatpickr(
@@ -299,8 +300,27 @@ export default class PointForm extends AbstractStatefulView{
       {
         dateFormat: 'j F',
         defaultDate: new Date(this._state.point.date_to),
+        onChange: this.#dateToChangeHandler,
       },
     );
+  };
+
+  #dateFromChangeHandler = ([userDate]) => {
+    this.updateElement({
+      point: {
+        ...this._state.point,
+        'date_from': userDate,
+      }
+    });
+  };
+
+  #dateToChangeHandler = ([userDate]) => {
+    this.updateElement({
+      point: {
+        ...this._state.point,
+        'date_to': userDate,
+      }
+    });
   };
 
   removeElement = () => {

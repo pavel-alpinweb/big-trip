@@ -7,8 +7,8 @@ import {DATES, POINTS_NAMES} from '../utils/constants';
 export default class EventsModel {
   #localPoint = {
     'base_price': '',
-    'date_from': '',
-    'date_to': '',
+    'date_from': new Date(),
+    'date_to': new Date(),
     'destination': null,
     'is_favorite': false,
     'offers': [],
