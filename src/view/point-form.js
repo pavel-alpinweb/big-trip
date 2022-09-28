@@ -1,5 +1,8 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {typeName, formatEventDateTime} from '../utils/helpers.js';
+import flatpickr from 'flatpickr';
+
+import 'flatpickr/dist/flatpickr.min.css';
 
 const isChecked = (id, offersIds) => offersIds.includes(id) ? 'checked' : '';
 
@@ -212,10 +215,10 @@ const createPointFormTemplate = (props) => `
 
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time-1">From</label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatEventDateTime(props.point.date_from)}">
+        <input class="event__input  event__input--time" id="event-start-time-${props.point.id}" type="text" name="event-start-time" value="${formatEventDateTime(props.point.date_from)}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatEventDateTime(props.point.date_to)}">
+        <input class="event__input  event__input--time" id="event-end-time-${props.point.id}" type="text" name="event-end-time" value="${formatEventDateTime(props.point.date_to)}">
       </div>
 
       <div class="event__field-group  event__field-group--price">
@@ -247,6 +250,8 @@ export default class PointForm extends AbstractStatefulView{
   #getOffersList = null;
   #getDestinationByName = null;
   #getOffersListByType = null;
+  #fromDatepicker = null;
+  #toDatepicker = null;
 
   constructor({props, getOffersList, getDestinationByName, getOffersListByType}) {
     super();
@@ -256,6 +261,7 @@ export default class PointForm extends AbstractStatefulView{
     this.#getOffersList = getOffersList;
     this.#getDestinationByName = getDestinationByName;
     this.#getOffersListByType = getOffersListByType;
+    this.#setDatepicker();
   }
 
   get template() {
@@ -279,6 +285,36 @@ export default class PointForm extends AbstractStatefulView{
       });
     });
   }
+
+  #setDatepicker = () => {
+    this.#fromDatepicker = flatpickr(
+      this.element.querySelector(`#event-start-time-${this.props.point.id}`),
+      {
+        dateFormat: 'j F',
+        defaultDate: new Date(this._state.point.date_from),
+      },
+    );
+    this.#toDatepicker = flatpickr(
+      this.element.querySelector(`#event-end-time-${this.props.point.id}`),
+      {
+        dateFormat: 'j F',
+        defaultDate: new Date(this._state.point.date_to),
+      },
+    );
+  };
+
+  removeElement = () => {
+    super.removeElement();
+
+    if (this.#fromDatepicker) {
+      this.#fromDatepicker.destroy();
+      this.#fromDatepicker = null;
+    }
+    if (this.#toDatepicker) {
+      this.#toDatepicker.destroy();
+      this.#toDatepicker = null;
+    }
+  };
 
   #changePointType(type) {
     this.updateElement({
@@ -340,6 +376,7 @@ export default class PointForm extends AbstractStatefulView{
 
   _restoreHandlers = () => {
     this.#setInnerHandlers();
+    this.#setDatepicker();
     this.setCloseClickHandler(this._callback.closeClick);
     this.setDeleteClickHandler(this._callback.closeDeleteClick);
     this.setSubmitHandler(this._callback.submit);

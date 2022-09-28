@@ -12,7 +12,8 @@ export default class EventsModel {
     'destination': null,
     'is_favorite': false,
     'offers': [],
-    'type': 'taxi'
+    'type': 'taxi',
+    'id': '0',
   };
 
   #points = Array.from(DATES, ([dateFrom, dateTo]) => generatePoint(dateFrom, dateTo));
