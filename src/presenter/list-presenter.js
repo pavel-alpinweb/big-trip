@@ -88,7 +88,13 @@ export default class ListPresenter {
   };
 
   init() {
-    this.#headerPresenter = new HeaderPresenter(this.#eventsModel, this.#headerContainer, this.openNewPointForm);
+    this.#headerPresenter = new HeaderPresenter({
+      eventsModel: this.#eventsModel,
+      headerContainer: this.#headerContainer,
+      openNewPointForm: this.openNewPointForm,
+      displayPoints: this.displayPoints,
+      clearPoints: this.clearPoints,
+    });
     this.#headerPresenter.init();
     this.#filtersPresenter = new FiltersPresenter({
       eventsModel: this.#eventsModel,
