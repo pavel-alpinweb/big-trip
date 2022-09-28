@@ -37,6 +37,7 @@ export default class ListPresenter {
       props: {
         point: this.#newPoint,
         offersArray: [],
+        isNewPoint: true,
         destinationsList: this.#eventsModel.destinations,
       },
       getOffersList: this.#eventsModel.getOffersListByIds,

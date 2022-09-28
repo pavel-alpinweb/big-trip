@@ -58,6 +58,15 @@ const createDestinationOptionsTemplate = (destinationsList) => {
   }
 };
 
+const createDeleteBtnTemplate = (isNewPoint) => isNewPoint ? '' : '<button class="event__reset-btn" type="reset">Delete</button>';
+
+const createCancelBtnTemplate = (isNewPoint) => isNewPoint ? '<button class="event__reset-btn" type="reset">Cancel</button>' : '';
+
+const createRollUpTemplate = (isNewPoint) => isNewPoint ? '' : `
+      <button class="event__rollup-btn" type="button">
+        <span class="visually-hidden">Open event</span>
+      </button>`;
+
 const createPointFormTemplate = (props) => `
 <li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -153,7 +162,9 @@ const createPointFormTemplate = (props) => `
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-      <button class="event__reset-btn" type="reset">Cancel</button>
+      ${createDeleteBtnTemplate(props.isNewPoint)}
+      ${createCancelBtnTemplate(props.isNewPoint)}
+      ${createRollUpTemplate(props.isNewPoint)}
     </header>
     <section class="event__details">
       <section class="event__section  event__section--offers">
