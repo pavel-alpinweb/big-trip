@@ -1,7 +1,15 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {typeName, formatEventDateTime} from '../utils/helpers.js';
+import flatpickr from 'flatpickr';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+dayjs.extend(duration);
+
+import 'flatpickr/dist/flatpickr.min.css';
 
 const isChecked = (id, offersIds) => offersIds.includes(id) ? 'checked' : '';
+
+const isEventChecked = (value, type) => value === type ? 'checked' : '';
 
 const createOffersListTemplate = (offers, offersIds) => {
   if (offers.length <= 0) {return '';}
@@ -58,6 +66,15 @@ const createDestinationOptionsTemplate = (destinationsList) => {
   }
 };
 
+const createDeleteBtnTemplate = (isNewPoint) => isNewPoint ? '' : '<button class="event__reset-btn" data-delete-btn type="reset">Delete</button>';
+
+const createCancelBtnTemplate = (isNewPoint) => isNewPoint ? '<button class="event__reset-btn" data-cancel-btn type="reset">Cancel</button>' : '';
+
+const createRollUpTemplate = (isNewPoint) => isNewPoint ? '' : `
+      <button class="event__rollup-btn" type="button" data-close-btn>
+        <span class="visually-hidden">Open event</span>
+      </button>`;
+
 const createPointFormTemplate = (props) => `
 <li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -74,47 +91,110 @@ const createPointFormTemplate = (props) => `
             <legend class="visually-hidden">Event type</legend>
 
             <div class="event__type-item">
-              <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
+              <input
+                id="event-type-taxi-1"
+                class="event__type-input  visually-hidden"
+                type="radio"
+                name="event-type"
+                value="taxi"
+                ${isEventChecked('taxi', props.point.type)}
+              >
               <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
             </div>
 
             <div class="event__type-item">
-              <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
+              <input
+                id="event-type-bus-1"
+                class="event__type-input  visually-hidden"
+                type="radio"
+                name="event-type"
+                value="bus"
+                ${isEventChecked('bus', props.point.type)}
+              >
               <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
             </div>
 
             <div class="event__type-item">
-              <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
+              <input
+                id="event-type-train-1"
+                class="event__type-input  visually-hidden"
+                type="radio"
+                name="event-type"
+                value="train"
+                ${isEventChecked('train', props.point.type)}
+              >
               <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
             </div>
 
             <div class="event__type-item">
-              <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
+              <input
+                id="event-type-ship-1"
+                class="event__type-input  visually-hidden"
+                type="radio"
+                name="event-type"
+                value="ship"
+                ${isEventChecked('ship', props.point.type)}
+              >
               <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
             </div>
 
             <div class="event__type-item">
-              <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
+              <input
+                id="event-type-drive-1"
+                class="event__type-input  visually-hidden"
+                type="radio"
+                name="event-type"
+                value="drive"
+                ${isEventChecked('drive', props.point.type)}
+              >
               <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
             </div>
 
             <div class="event__type-item">
-              <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
+              <input
+                id="event-type-flight-1"
+                class="event__type-input  visually-hidden"
+                type="radio"
+                name="event-type"
+                value="flight"
+                ${isEventChecked('flight', props.point.type)}
+              >
               <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
             </div>
 
             <div class="event__type-item">
-              <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
+              <input
+                id="event-type-check-in-1"
+                class="event__type-input  visually-hidden"
+                type="radio"
+                name="event-type"
+                value="check-in"
+                ${isEventChecked('check-in', props.point.type)}
+              >
               <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
             </div>
 
             <div class="event__type-item">
-              <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
+              <input
+                id="event-type-sightseeing-1"
+                class="event__type-input  visually-hidden"
+                type="radio"
+                name="event-type"
+                value="sightseeing"
+                ${isEventChecked('sightseeing', props.point.type)}
+              >
               <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
             </div>
 
             <div class="event__type-item">
-              <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
+              <input
+                id="event-type-restaurant-1"
+                class="event__type-input  visually-hidden"
+                type="radio"
+                name="event-type"
+                value="restaurant"
+                ${isEventChecked('restaurant', props.point.type)}
+              >
               <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
             </div>
           </fieldset>
@@ -138,10 +218,10 @@ const createPointFormTemplate = (props) => `
 
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time-1">From</label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatEventDateTime(props.point.date_from)}">
+        <input class="event__input  event__input--time" id="event-start-time-${props.point.id}" type="text" name="event-start-time" value="${formatEventDateTime(props.point.date_from)}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatEventDateTime(props.point.date_to)}">
+        <input class="event__input  event__input--time" id="event-end-time-${props.point.id}" type="text" name="event-end-time" value="${formatEventDateTime(props.point.date_to)}">
       </div>
 
       <div class="event__field-group  event__field-group--price">
@@ -153,7 +233,9 @@ const createPointFormTemplate = (props) => `
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-      <button class="event__reset-btn" type="reset">Cancel</button>
+      ${createDeleteBtnTemplate(props.isNewPoint)}
+      ${createCancelBtnTemplate(props.isNewPoint)}
+      ${createRollUpTemplate(props.isNewPoint)}
     </header>
     <section class="event__details">
       <section class="event__section  event__section--offers">
@@ -171,6 +253,8 @@ export default class PointForm extends AbstractStatefulView{
   #getOffersList = null;
   #getDestinationByName = null;
   #getOffersListByType = null;
+  #fromDatepicker = null;
+  #toDatepicker = null;
 
   constructor({props, getOffersList, getDestinationByName, getOffersListByType}) {
     super();
@@ -180,6 +264,7 @@ export default class PointForm extends AbstractStatefulView{
     this.#getOffersList = getOffersList;
     this.#getDestinationByName = getDestinationByName;
     this.#getOffersListByType = getOffersListByType;
+    this.#setDatepicker();
   }
 
   get template() {
@@ -203,6 +288,63 @@ export default class PointForm extends AbstractStatefulView{
       });
     });
   }
+
+  #setDatepicker = () => {
+    this.#fromDatepicker = flatpickr(
+      this.element.querySelector(`#event-start-time-${this.props.point.id}`),
+      {
+        dateFormat: 'd/m/y H:i',
+        'time_24hr': true,
+        enableTime: true,
+        defaultDate: new Date(this._state.point.date_from),
+        onChange: this.#dateFromChangeHandler,
+      },
+    );
+    this.#toDatepicker = flatpickr(
+      this.element.querySelector(`#event-end-time-${this.props.point.id}`),
+      {
+        dateFormat: 'd/m/y H:i',
+        'time_24hr': true,
+        enableTime: true,
+        defaultDate: new Date(this._state.point.date_to),
+        onChange: this.#dateToChangeHandler,
+      },
+    );
+  };
+
+  #dateFromChangeHandler = ([userDate]) => {
+    this.updateElement({
+      point: {
+        ...this._state.point,
+        'date_from': userDate,
+      }
+    });
+  };
+
+  #dateToChangeHandler = ([userDate]) => {
+    let resultDate = this._state.point.date_from;
+    const isValidDate = dayjs(userDate).diff(resultDate, 'd') > 0;
+    if (isValidDate) {resultDate = userDate;}
+    this.updateElement({
+      point: {
+        ...this._state.point,
+        'date_to': resultDate,
+      }
+    });
+  };
+
+  removeElement = () => {
+    super.removeElement();
+
+    if (this.#fromDatepicker) {
+      this.#fromDatepicker.destroy();
+      this.#fromDatepicker = null;
+    }
+    if (this.#toDatepicker) {
+      this.#toDatepicker.destroy();
+      this.#toDatepicker = null;
+    }
+  };
 
   #changePointType(type) {
     this.updateElement({
@@ -237,9 +379,24 @@ export default class PointForm extends AbstractStatefulView{
     });
   }
 
-  setClickHandler = (callback) => {
-    this._callback.click = callback;
-    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#clickHandler);
+  resetState() {
+    this.updateElement({...this.props});
+  }
+
+  setCloseClickHandler = (callback) => {
+    this._callback.closeClick = callback;
+    if (this.props.isNewPoint) {
+      this.element.querySelector('[data-cancel-btn]').addEventListener('click', this.#clickCloseHandler);
+    } else {
+      this.element.querySelector('[data-close-btn]').addEventListener('click', this.#clickCloseHandler);
+    }
+  };
+
+  setDeleteClickHandler = (callback) => {
+    if (!this.props.isNewPoint) {
+      this._callback.closeDeleteClick = callback;
+      this.element.querySelector('[data-delete-btn]').addEventListener('click', this.#clickDeleteHandler);
+    }
   };
 
   setSubmitHandler = (callback) => {
@@ -249,18 +406,25 @@ export default class PointForm extends AbstractStatefulView{
 
   _restoreHandlers = () => {
     this.#setInnerHandlers();
-    this.setClickHandler(this._callback.click);
+    this.#setDatepicker();
+    this.setCloseClickHandler(this._callback.closeClick);
+    this.setDeleteClickHandler(this._callback.closeDeleteClick);
     this.setSubmitHandler(this._callback.submit);
   };
 
-  #clickHandler = (evt) => {
+  #clickCloseHandler = (evt) => {
     evt.preventDefault();
-    this._callback.click();
+    this._callback.closeClick();
+  };
+
+  #clickDeleteHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.closeDeleteClick();
   };
 
   deleteClickHandler = () => {
-    this.element.querySelector('.event__reset-btn').removeEventListener('click', this._callback.click);
-    this._callback.click = null;
+    this.element.querySelector('.event__reset-btn').removeEventListener('click', this._callback.closeClick);
+    this._callback.closeClick = null;
   };
 
   #submitHandler = (evt) => {

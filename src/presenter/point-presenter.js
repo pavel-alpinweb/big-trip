@@ -16,7 +16,7 @@ export default class PointPresenter {
     this.#eventsModel = eventsModel;
     this.#pointComponent = new Point({point, offersArray, destination});
     this.#pontFormComponent = new PointForm({
-      props: {point, offersArray: allOffers, destination, destinationsList},
+      props: {point, offersArray: allOffers, destination, destinationsList, isNewPoint: false},
       getOffersList: this.#eventsModel.getOffersListByIds,
       getDestinationByName: this.#eventsModel.getDestinationByName,
       getOffersListByType: this.#eventsModel.getOffersListByType,
@@ -49,6 +49,7 @@ export default class PointPresenter {
       if (evt.key === 'Escape' || evt.key === 'Esc') {
         evt.preventDefault();
         this.#mode = POINT_MODES.DEFAULT;
+        this.#pontFormComponent.resetState();
         this.replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
         document.removeEventListener('keydown', onEscKeyDown);
       }
@@ -61,9 +62,18 @@ export default class PointPresenter {
       document.addEventListener('keydown', onEscKeyDown);
     });
 
-    this.#pontFormComponent.setClickHandler(() => {
+    this.#pontFormComponent.setCloseClickHandler(() => {
       this.#mode = POINT_MODES.DEFAULT;
+      this.#pontFormComponent.resetState();
       this.replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
+      document.removeEventListener('keydown', onEscKeyDown);
+    });
+
+    this.#pontFormComponent.setDeleteClickHandler(() => {
+      this.#mode = POINT_MODES.DEFAULT;
+      this.#pontFormComponent.resetState();
+      this.replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
+      document.removeEventListener('keydown', onEscKeyDown);
     });
 
     this.#pontFormComponent.setSubmitHandler(() => {

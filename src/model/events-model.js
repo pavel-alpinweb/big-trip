@@ -7,12 +7,13 @@ import {DATES, POINTS_NAMES} from '../utils/constants';
 export default class EventsModel {
   #localPoint = {
     'base_price': '',
-    'date_from': '',
-    'date_to': '',
+    'date_from': new Date(),
+    'date_to': new Date(),
     'destination': null,
     'is_favorite': false,
     'offers': [],
-    'type': 'taxi'
+    'type': 'taxi',
+    'id': '0',
   };
 
   #points = Array.from(DATES, ([dateFrom, dateTo]) => generatePoint(dateFrom, dateTo));

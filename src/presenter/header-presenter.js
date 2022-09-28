@@ -6,16 +6,22 @@ export default class HeaderPresenter {
   #eventsModel = null;
   #headerContainer = null;
   #openNewPointForm = null;
-  constructor(eventsModel, headerContainer, openNewPointForm) {
+  #displayPoints = null;
+  #clearPoints = null;
+  constructor({eventsModel, headerContainer, openNewPointForm, displayPoints, clearPoints}) {
     this.#eventsModel = eventsModel;
     this.#headerContainer = headerContainer;
     this.#openNewPointForm = openNewPointForm;
+    this.#displayPoints = displayPoints;
+    this.#clearPoints = clearPoints;
   }
 
   init() {
     const buttonComponent = new NewEventButton();
     buttonComponent.setClickHandler(() => {
-      this.#openNewPointForm();
+      this.#openNewPointForm(buttonComponent);
+      this.#clearPoints();
+      this.#displayPoints(this.#eventsModel.pointsSortedByDay);
     });
     render(buttonComponent, this.#headerContainer);
     render(new TripInfo({totalPrice: this.#eventsModel.totalPrice, pointsNames: this.#eventsModel.pointsNames, tripDuring: this.#eventsModel.tripDuring}), this.#headerContainer, RenderPosition.AFTERBEGIN);

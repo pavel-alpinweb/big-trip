@@ -32,22 +32,45 @@ export default class ListPresenter {
     this.#pointPresentersMap.forEach((presenter) => presenter.resetView());
   };
 
-  openNewPointForm = () => {
+  closeNewPointForm(buttonComponent, onEscKeyDown) {
+    buttonComponent.changeBtnState();
+    this.#newPointFormComponent.resetState();
+    this.#newPointFormComponent.deleteClickHandler();
+    document.removeEventListener('keydown', onEscKeyDown);
+    remove(this.#newPointFormComponent);
+  }
+
+  openNewPointForm = (buttonComponent) => {
+    buttonComponent.changeBtnState();
+    const onEscKeyDown = (evt) => {
+      if (evt.key === 'Escape' || evt.key === 'Esc') {
+        evt.preventDefault();
+        buttonComponent.changeBtnState();
+        this.#newPointFormComponent.resetState();
+        this.#newPointFormComponent.deleteClickHandler();
+        remove(this.#newPointFormComponent);
+        document.removeEventListener('keydown', onEscKeyDown);
+      }
+    };
     this.#newPointFormComponent = new PointForm({
       props: {
         point: this.#newPoint,
         offersArray: [],
+        isNewPoint: true,
         destinationsList: this.#eventsModel.destinations,
       },
       getOffersList: this.#eventsModel.getOffersListByIds,
       getDestinationByName: this.#eventsModel.getDestinationByName,
       getOffersListByType: this.#eventsModel.getOffersListByType,
     });
-    this.#newPointFormComponent.setClickHandler(() => {
-      this.#newPointFormComponent.deleteClickHandler();
-      remove(this.#newPointFormComponent);
+    this.#newPointFormComponent.setCloseClickHandler(() => {
+      this.closeNewPointForm(buttonComponent, onEscKeyDown);
+    });
+    this.#newPointFormComponent.setSubmitHandler(() => {
+      this.closeNewPointForm(buttonComponent, onEscKeyDown);
     });
     render(this.#newPointFormComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
+    document.addEventListener('keydown', onEscKeyDown);
   };
 
   displayPoints = (pointsList) => {
@@ -76,7 +99,13 @@ export default class ListPresenter {
   };
 
   init() {
-    this.#headerPresenter = new HeaderPresenter(this.#eventsModel, this.#headerContainer, this.openNewPointForm);
+    this.#headerPresenter = new HeaderPresenter({
+      eventsModel: this.#eventsModel,
+      headerContainer: this.#headerContainer,
+      openNewPointForm: this.openNewPointForm,
+      displayPoints: this.displayPoints,
+      clearPoints: this.clearPoints,
+    });
     this.#headerPresenter.init();
     this.#filtersPresenter = new FiltersPresenter({
       eventsModel: this.#eventsModel,
