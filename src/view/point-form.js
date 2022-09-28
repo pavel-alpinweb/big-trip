@@ -58,12 +58,12 @@ const createDestinationOptionsTemplate = (destinationsList) => {
   }
 };
 
-const createDeleteBtnTemplate = (isNewPoint) => isNewPoint ? '' : '<button class="event__reset-btn" type="reset">Delete</button>';
+const createDeleteBtnTemplate = (isNewPoint) => isNewPoint ? '' : '<button class="event__reset-btn" data-delete-btn type="reset">Delete</button>';
 
-const createCancelBtnTemplate = (isNewPoint) => isNewPoint ? '<button class="event__reset-btn" type="reset">Cancel</button>' : '';
+const createCancelBtnTemplate = (isNewPoint) => isNewPoint ? '<button class="event__reset-btn" data-cancel-btn type="reset">Cancel</button>' : '';
 
 const createRollUpTemplate = (isNewPoint) => isNewPoint ? '' : `
-      <button class="event__rollup-btn" type="button">
+      <button class="event__rollup-btn" type="button" data-close-btn>
         <span class="visually-hidden">Open event</span>
       </button>`;
 
@@ -250,7 +250,12 @@ export default class PointForm extends AbstractStatefulView{
 
   setClickHandler = (callback) => {
     this._callback.click = callback;
-    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#clickHandler);
+    if (this.props.isNewPoint) {
+      this.element.querySelector('[data-cancel-btn]').addEventListener('click', this.#clickHandler);
+    } else {
+      this.element.querySelector('[data-delete-btn]').addEventListener('click', this.#clickHandler);
+      this.element.querySelector('[data-close-btn]').addEventListener('click', this.#clickHandler);
+    }
   };
 
   setSubmitHandler = (callback) => {
