@@ -66,12 +66,14 @@ export default class PointPresenter {
       this.#mode = POINT_MODES.DEFAULT;
       this.#pontFormComponent.resetState();
       this.replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
+      document.removeEventListener('keydown', onEscKeyDown);
     });
 
     this.#pontFormComponent.setDeleteClickHandler(() => {
       this.#mode = POINT_MODES.DEFAULT;
       this.#pontFormComponent.resetState();
       this.replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
+      document.removeEventListener('keydown', onEscKeyDown);
     });
 
     this.#pontFormComponent.setSubmitHandler(() => {

@@ -36,8 +36,8 @@ export default class ListPresenter {
     const onEscKeyDown = (evt) => {
       if (evt.key === 'Escape' || evt.key === 'Esc') {
         evt.preventDefault();
-        this.#newPointFormComponent.deleteClickHandler();
         this.#newPointFormComponent.resetState();
+        this.#newPointFormComponent.deleteClickHandler();
         remove(this.#newPointFormComponent);
         document.removeEventListener('keydown', onEscKeyDown);
       }
