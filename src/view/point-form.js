@@ -1,15 +1,24 @@
-import AbstractView from '../framework/view/abstract-view';
-import {typeName, formatEventDateTime} from '../utils/helpers';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
+import {typeName, formatEventDateTime} from '../utils/helpers.js';
 
-const createOffersListTemplate = (offers) => {
+const isChecked = (id, offersIds) => offersIds.includes(id) ? 'checked' : '';
+
+const createOffersListTemplate = (offers, offersIds) => {
   if (offers.length <= 0) {return '';}
   else {return `
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
     <div class="event__available-offers">
-        ${offers.map(({title, price}) => `
+        ${offers.map(({id, title, price}) => `
         <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked>
-            <label class="event__offer-label" for="event-offer-luggage-1">
+            <input
+                class="event__offer-checkbox  visually-hidden"
+                id="event-offer-luggage-${id}"
+                type="checkbox"
+                name="event-offer-luggage"
+                value="${id}"
+                ${isChecked(id, offersIds)}
+            >
+            <label class="event__offer-label" for="event-offer-luggage-${id}">
               <span class="event__offer-title">${title}</span>
               &plus;&euro;&nbsp;
               <span class="event__offer-price">${price}</span>
@@ -34,6 +43,19 @@ const createDestinationTemplate = (destination) => {
     </div>
   </section>
   `;}
+};
+
+const createDestinationOptionsTemplate = (destinationsList) => {
+  if (destinationsList.length <= 0) {return '';}
+  else {
+    return `
+      <datalist id="destination-list-1">
+        ${destinationsList.map(({name}) => `
+          <option value="${name}"></option>
+        `).join('')}
+      </datalist>
+    `;
+  }
 };
 
 const createPointFormTemplate = (props) => `
@@ -103,12 +125,15 @@ const createPointFormTemplate = (props) => `
         <label class="event__label  event__type-output" for="event-destination-1">
           ${typeName(props.point.type)}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${props.destination?.name ?? ''}" list="destination-list-1">
-        <datalist id="destination-list-1">
-          <option value="Amsterdam"></option>
-          <option value="Geneva"></option>
-          <option value="Chamonix"></option>
-        </datalist>
+        <input
+            class="event__input  event__input--destination"
+            id="event-destination-1"
+            type="text"
+            name="event-destination"
+            value="${props.destination?.name ?? ''}"
+            list="destination-list-1"
+        >
+        ${createDestinationOptionsTemplate(props.destinationsList)}
       </div>
 
       <div class="event__field-group  event__field-group--time">
@@ -133,7 +158,7 @@ const createPointFormTemplate = (props) => `
     <section class="event__details">
       <section class="event__section  event__section--offers">
 
-        ${createOffersListTemplate(props.offersArray)}
+        ${createOffersListTemplate(props.offersArray, props.point.offers)}
       </section>
 
       ${createDestinationTemplate(props.destination)}
@@ -142,14 +167,74 @@ const createPointFormTemplate = (props) => `
 </li>
 `;
 
-export default class PointForm extends AbstractView{
-  constructor(props) {
+export default class PointForm extends AbstractStatefulView{
+  #getOffersList = null;
+  #getDestinationByName = null;
+  #getOffersListByType = null;
+
+  constructor({props, getOffersList, getDestinationByName, getOffersListByType}) {
     super();
     this.props = props;
+    this._state = {...this.props};
+    this.#setInnerHandlers();
+    this.#getOffersList = getOffersList;
+    this.#getDestinationByName = getDestinationByName;
+    this.#getOffersListByType = getOffersListByType;
   }
 
   get template() {
-    return createPointFormTemplate(this.props);
+    return createPointFormTemplate(this._state);
+  }
+
+  #setInnerHandlers() {
+    const typeInputsElements = this.element.querySelectorAll('.event__type-input');
+    typeInputsElements.forEach((el) => {
+      el.addEventListener('change', (event) => {
+        this.#changePointType(event.target.value);
+      });
+    });
+    this.element.querySelector('#event-destination-1').addEventListener('change', (event) => {
+      this.#changePointDestination(event.target.value);
+    });
+    const inputCheckBoxes = this.element.querySelectorAll('.event__offer-checkbox');
+    inputCheckBoxes.forEach((el) => {
+      el.addEventListener('change', (event) => {
+        this.#changePointOffersList(event.target.value);
+      });
+    });
+  }
+
+  #changePointType(type) {
+    this.updateElement({
+      point: {
+        ...this._state.point,
+        offers: [],
+        type,
+      },
+      offersArray: this.#getOffersListByType(type),
+    });
+  }
+
+  #changePointOffersList(id) {
+    const idIndex = this._state.point.offers.indexOf(Number(id));
+    const offersArray = [...this._state.point.offers];
+    if (idIndex > -1) {
+      offersArray.splice(idIndex, 1);
+    } else {
+      offersArray.push(Number(id));
+    }
+    this._setState({
+      point: {
+        ...this._state.point,
+        offers: offersArray,
+      },
+    });
+  }
+
+  #changePointDestination(name) {
+    this.updateElement({
+      destination: this.#getDestinationByName(name),
+    });
   }
 
   setClickHandler = (callback) => {
@@ -160,6 +245,12 @@ export default class PointForm extends AbstractView{
   setSubmitHandler = (callback) => {
     this._callback.submit = callback;
     this.element.querySelector('form').addEventListener('submit', this.#submitHandler);
+  };
+
+  _restoreHandlers = () => {
+    this.#setInnerHandlers();
+    this.setClickHandler(this._callback.click);
+    this.setSubmitHandler(this._callback.submit);
   };
 
   #clickHandler = (evt) => {

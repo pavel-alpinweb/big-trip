@@ -14,15 +14,15 @@ export const generateDestination = (name, i) => ({
   ]
 });
 
-export const generateOffer = (el, i) => ({
+export const generateOffer = (type, i) => ({
   'id': i,
-  'title': 'Upgrade to a business class',
+  'title': `${type.toUpperCase()} - Upgrade to a business class`,
   'price': getRandomInteger(i, 100),
 });
 
 export const generateOffersByType = (type) => ({
   type,
-  'offers': Array.from({length: 3}, generateOffer),
+  'offers': Array.from({length: 3}, (_, index) => generateOffer(type, index)),
 });
 
 export const generateOffersByTypeArray = () => (Object.values(TYPES).map((type) => generateOffersByType(type)));

@@ -10,7 +10,6 @@ export default class ListPresenter {
   #eventsModel = null;
   #listContainer = null;
   #newPoint = null;
-  #currentOffersArray = [];
   #filtersPresenter = null;
   #filtersContainer = null;
   #sortPresenter = null;
@@ -24,7 +23,6 @@ export default class ListPresenter {
     this.#eventsModel = eventsModel;
     this.#listContainer = listContainer;
     this.#newPoint = this.#eventsModel.localPoint;
-    this.#currentOffersArray = this.#eventsModel.getOffersList(this.#newPoint.type, this.#newPoint.offers);
     this.#headerContainer = document.querySelector('.trip-main');
     this.#filtersContainer = document.querySelector('.trip-controls__filters');
     this.#sortContainer = document.querySelector('.trip-events__list');
@@ -35,7 +33,16 @@ export default class ListPresenter {
   };
 
   openNewPointForm = () => {
-    this.#newPointFormComponent = new PointForm({point: this.#newPoint, offersArray: this.#currentOffersArray});
+    this.#newPointFormComponent = new PointForm({
+      props: {
+        point: this.#newPoint,
+        offersArray: [],
+        destinationsList: this.#eventsModel.destinations,
+      },
+      getOffersList: this.#eventsModel.getOffersListByIds,
+      getDestinationByName: this.#eventsModel.getDestinationByName,
+      getOffersListByType: this.#eventsModel.getOffersListByType,
+    });
     this.#newPointFormComponent.setClickHandler(() => {
       this.#newPointFormComponent.deleteClickHandler();
       remove(this.#newPointFormComponent);
@@ -45,15 +52,18 @@ export default class ListPresenter {
 
   displayPoints = (pointsList) => {
     for (const point of pointsList) {
-      const offersArray = this.#eventsModel.getOffersList(point.type, point.offers);
+      const offersArray = this.#eventsModel.getOffersListByIds(point.type, point.offers);
+      const allOffers = this.#eventsModel.getOffersListByType(point.type);
       const destination = this.#eventsModel.getDestinationById(point.destination);
       const pointPresenter = new PointPresenter({
         listContainer: this.#listContainer,
         point,
         offersArray,
+        allOffers,
         destination,
         eventsModel: this.#eventsModel,
         reset: this.resetAllPointsView,
+        destinationsList: this.#eventsModel.destinations,
       });
       this.#pointPresentersMap.set(point.id, pointPresenter);
       pointPresenter.init();
