@@ -248,8 +248,13 @@ export default class PointForm extends AbstractStatefulView{
     });
   }
 
+  #resetState() {
+    this._setState({...this.props});
+  }
+
   setCloseClickHandler = (callback) => {
     this._callback.closeClick = callback;
+    this.#resetState();
     if (this.props.isNewPoint) {
       this.element.querySelector('[data-cancel-btn]').addEventListener('click', this.#clickCloseHandler);
     } else {
@@ -259,6 +264,7 @@ export default class PointForm extends AbstractStatefulView{
 
   setDeleteClickHandler = (callback) => {
     if (!this.props.isNewPoint) {
+      this.#resetState();
       this._callback.closeDeleteClick = callback;
       this.element.querySelector('[data-delete-btn]').addEventListener('click', this.#clickDeleteHandler);
     }
@@ -271,7 +277,8 @@ export default class PointForm extends AbstractStatefulView{
 
   _restoreHandlers = () => {
     this.#setInnerHandlers();
-    this.setClickHandler(this._callback.click);
+    this.setCloseClickHandler(this._callback.closeClick);
+    this.setDeleteClickHandler(this._callback.closeDeleteClick);
     this.setSubmitHandler(this._callback.submit);
   };
 
