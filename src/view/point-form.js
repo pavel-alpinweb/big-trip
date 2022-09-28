@@ -248,13 +248,19 @@ export default class PointForm extends AbstractStatefulView{
     });
   }
 
-  setClickHandler = (callback) => {
-    this._callback.click = callback;
+  setCloseClickHandler = (callback) => {
+    this._callback.closeClick = callback;
     if (this.props.isNewPoint) {
-      this.element.querySelector('[data-cancel-btn]').addEventListener('click', this.#clickHandler);
+      this.element.querySelector('[data-cancel-btn]').addEventListener('click', this.#clickCloseHandler);
     } else {
-      this.element.querySelector('[data-delete-btn]').addEventListener('click', this.#clickHandler);
-      this.element.querySelector('[data-close-btn]').addEventListener('click', this.#clickHandler);
+      this.element.querySelector('[data-close-btn]').addEventListener('click', this.#clickCloseHandler);
+    }
+  };
+
+  setDeleteClickHandler = (callback) => {
+    if (!this.props.isNewPoint) {
+      this._callback.closeDeleteClick = callback;
+      this.element.querySelector('[data-delete-btn]').addEventListener('click', this.#clickDeleteHandler);
     }
   };
 
@@ -269,14 +275,19 @@ export default class PointForm extends AbstractStatefulView{
     this.setSubmitHandler(this._callback.submit);
   };
 
-  #clickHandler = (evt) => {
+  #clickCloseHandler = (evt) => {
     evt.preventDefault();
-    this._callback.click();
+    this._callback.closeClick();
+  };
+
+  #clickDeleteHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.closeDeleteClick();
   };
 
   deleteClickHandler = () => {
-    this.element.querySelector('.event__reset-btn').removeEventListener('click', this._callback.click);
-    this._callback.click = null;
+    this.element.querySelector('.event__reset-btn').removeEventListener('click', this._callback.closeClick);
+    this._callback.closeClick = null;
   };
 
   #submitHandler = (evt) => {

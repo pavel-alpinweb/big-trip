@@ -33,6 +33,14 @@ export default class ListPresenter {
   };
 
   openNewPointForm = () => {
+    const onEscKeyDown = (evt) => {
+      if (evt.key === 'Escape' || evt.key === 'Esc') {
+        evt.preventDefault();
+        this.#newPointFormComponent.deleteClickHandler();
+        remove(this.#newPointFormComponent);
+        document.removeEventListener('keydown', onEscKeyDown);
+      }
+    };
     this.#newPointFormComponent = new PointForm({
       props: {
         point: this.#newPoint,
@@ -44,11 +52,12 @@ export default class ListPresenter {
       getDestinationByName: this.#eventsModel.getDestinationByName,
       getOffersListByType: this.#eventsModel.getOffersListByType,
     });
-    this.#newPointFormComponent.setClickHandler(() => {
+    this.#newPointFormComponent.setCloseClickHandler(() => {
       this.#newPointFormComponent.deleteClickHandler();
       remove(this.#newPointFormComponent);
     });
     render(this.#newPointFormComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
+    document.addEventListener('keydown', onEscKeyDown);
   };
 
   displayPoints = (pointsList) => {

@@ -61,7 +61,12 @@ export default class PointPresenter {
       document.addEventListener('keydown', onEscKeyDown);
     });
 
-    this.#pontFormComponent.setClickHandler(() => {
+    this.#pontFormComponent.setCloseClickHandler(() => {
+      this.#mode = POINT_MODES.DEFAULT;
+      this.replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
+    });
+
+    this.#pontFormComponent.setDeleteClickHandler(() => {
       this.#mode = POINT_MODES.DEFAULT;
       this.replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
     });
