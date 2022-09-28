@@ -49,6 +49,7 @@ export default class PointPresenter {
       if (evt.key === 'Escape' || evt.key === 'Esc') {
         evt.preventDefault();
         this.#mode = POINT_MODES.DEFAULT;
+        this.#pontFormComponent.resetState();
         this.replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
         document.removeEventListener('keydown', onEscKeyDown);
       }
@@ -63,11 +64,13 @@ export default class PointPresenter {
 
     this.#pontFormComponent.setCloseClickHandler(() => {
       this.#mode = POINT_MODES.DEFAULT;
+      this.#pontFormComponent.resetState();
       this.replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
     });
 
     this.#pontFormComponent.setDeleteClickHandler(() => {
       this.#mode = POINT_MODES.DEFAULT;
+      this.#pontFormComponent.resetState();
       this.replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
     });
 

@@ -37,6 +37,7 @@ export default class ListPresenter {
       if (evt.key === 'Escape' || evt.key === 'Esc') {
         evt.preventDefault();
         this.#newPointFormComponent.deleteClickHandler();
+        this.#newPointFormComponent.resetState();
         remove(this.#newPointFormComponent);
         document.removeEventListener('keydown', onEscKeyDown);
       }
@@ -53,6 +54,7 @@ export default class ListPresenter {
       getOffersListByType: this.#eventsModel.getOffersListByType,
     });
     this.#newPointFormComponent.setCloseClickHandler(() => {
+      this.#newPointFormComponent.resetState();
       this.#newPointFormComponent.deleteClickHandler();
       remove(this.#newPointFormComponent);
     });
