@@ -19,7 +19,7 @@ export default class HeaderPresenter {
   init() {
     const buttonComponent = new NewEventButton();
     buttonComponent.setClickHandler(() => {
-      this.#openNewPointForm();
+      this.#openNewPointForm(buttonComponent);
       this.#clearPoints();
       this.#displayPoints(this.#eventsModel.pointsSortedByDay);
     });
