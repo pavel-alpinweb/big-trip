@@ -1,6 +1,9 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {typeName, formatEventDateTime} from '../utils/helpers.js';
 import flatpickr from 'flatpickr';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+dayjs.extend(duration);
 
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -290,7 +293,9 @@ export default class PointForm extends AbstractStatefulView{
     this.#fromDatepicker = flatpickr(
       this.element.querySelector(`#event-start-time-${this.props.point.id}`),
       {
-        dateFormat: 'j F',
+        dateFormat: 'd/m/y H:i',
+        'time_24hr': true,
+        enableTime: true,
         defaultDate: new Date(this._state.point.date_from),
         onChange: this.#dateFromChangeHandler,
       },
@@ -298,7 +303,9 @@ export default class PointForm extends AbstractStatefulView{
     this.#toDatepicker = flatpickr(
       this.element.querySelector(`#event-end-time-${this.props.point.id}`),
       {
-        dateFormat: 'j F',
+        dateFormat: 'd/m/y H:i',
+        'time_24hr': true,
+        enableTime: true,
         defaultDate: new Date(this._state.point.date_to),
         onChange: this.#dateToChangeHandler,
       },
@@ -315,10 +322,13 @@ export default class PointForm extends AbstractStatefulView{
   };
 
   #dateToChangeHandler = ([userDate]) => {
+    let resultDate = this._state.point.date_from;
+    const isValidDate = dayjs(userDate).diff(resultDate, 'd') > 0;
+    if (isValidDate) {resultDate = userDate;}
     this.updateElement({
       point: {
         ...this._state.point,
-        'date_to': userDate,
+        'date_to': resultDate,
       }
     });
   };
