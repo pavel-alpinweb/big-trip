@@ -32,6 +32,14 @@ export default class ListPresenter {
     this.#pointPresentersMap.forEach((presenter) => presenter.resetView());
   };
 
+  closeNewPointForm(buttonComponent, onEscKeyDown) {
+    buttonComponent.changeBtnState();
+    this.#newPointFormComponent.resetState();
+    this.#newPointFormComponent.deleteClickHandler();
+    document.removeEventListener('keydown', onEscKeyDown);
+    remove(this.#newPointFormComponent);
+  }
+
   openNewPointForm = (buttonComponent) => {
     buttonComponent.changeBtnState();
     const onEscKeyDown = (evt) => {
@@ -56,11 +64,10 @@ export default class ListPresenter {
       getOffersListByType: this.#eventsModel.getOffersListByType,
     });
     this.#newPointFormComponent.setCloseClickHandler(() => {
-      buttonComponent.changeBtnState();
-      this.#newPointFormComponent.resetState();
-      this.#newPointFormComponent.deleteClickHandler();
-      document.removeEventListener('keydown', onEscKeyDown);
-      remove(this.#newPointFormComponent);
+      this.closeNewPointForm(buttonComponent, onEscKeyDown);
+    });
+    this.#newPointFormComponent.setSubmitHandler(() => {
+      this.closeNewPointForm(buttonComponent, onEscKeyDown);
     });
     render(this.#newPointFormComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
     document.addEventListener('keydown', onEscKeyDown);
