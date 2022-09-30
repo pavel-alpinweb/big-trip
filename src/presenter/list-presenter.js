@@ -70,6 +70,12 @@ export default class ListPresenter {
       this.closeNewPointForm(buttonComponent, onEscKeyDown);
     });
     render(this.#newPointFormComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
+    this.clearPoints();
+    this.displayPoints(this.#eventsModel.pointsSortedByDay);
+    this.#filtersPresenter.destroy();
+    this.#sortPresenter.destroy();
+    this.#initSort();
+    this.#initFilters();
     document.addEventListener('keydown', onEscKeyDown);
   };
 
@@ -98,6 +104,26 @@ export default class ListPresenter {
     this.#pointPresentersMap.clear();
   };
 
+  #initFilters() {
+    this.#filtersPresenter = new FiltersPresenter({
+      eventsModel: this.#eventsModel,
+      filtersContainer: this.#filtersContainer,
+      clearPoints: this.clearPoints,
+      displayPoints: this.displayPoints,
+    });
+    this.#filtersPresenter.init();
+  }
+
+  #initSort() {
+    this.#sortPresenter = new SortPresenter({
+      eventsModel: this.#eventsModel,
+      sortContainer: this.#sortContainer,
+      clearPoints: this.clearPoints,
+      displayPoints: this.displayPoints,
+    });
+    this.#sortPresenter.init();
+  }
+
   init() {
     this.#headerPresenter = new HeaderPresenter({
       eventsModel: this.#eventsModel,
@@ -107,20 +133,8 @@ export default class ListPresenter {
       clearPoints: this.clearPoints,
     });
     this.#headerPresenter.init();
-    this.#filtersPresenter = new FiltersPresenter({
-      eventsModel: this.#eventsModel,
-      filtersContainer: this.#filtersContainer,
-      clearPoints: this.clearPoints,
-      displayPoints: this.displayPoints,
-    });
-    this.#filtersPresenter.init();
-    this.#sortPresenter = new SortPresenter({
-      eventsModel: this.#eventsModel,
-      sortContainer: this.#sortContainer,
-      clearPoints: this.clearPoints,
-      displayPoints: this.displayPoints,
-    });
-    this.#sortPresenter.init();
+    this.#initFilters();
+    this.#initSort();
     if (this.#eventsModel.points.length === 0) {
       render(new EmptyMessage, this.#listContainer);
     } else {

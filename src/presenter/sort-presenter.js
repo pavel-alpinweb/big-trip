@@ -1,4 +1,4 @@
-import {render, RenderPosition} from '../framework/render.js';
+import {remove, render, RenderPosition} from '../framework/render.js';
 import Sort from '../view/sort.js';
 import {SORT_MODES} from '../utils/constants.js';
 import {getKeyByValue} from '../utils/helpers.js';
@@ -9,6 +9,7 @@ export default class SortPresenter {
   #sortContainer = null;
   #clearPoints = null;
   #displayPoints = null;
+  #sortedComponent = null;
   #activeSort = SORT_MODES.DAY;
   constructor({eventsModel, sortContainer, clearPoints, displayPoints}) {
     this.#eventsModel = eventsModel;
@@ -18,8 +19,8 @@ export default class SortPresenter {
   }
 
   init() {
-    const sortElement = new Sort();
-    sortElement.setClickHandler((type) => {
+    this.#sortedComponent = new Sort();
+    this.#sortedComponent.setClickHandler((type) => {
       if (this.#activeSort !== SORT_MODES[getKeyByValue(SORT_MODES, type)]) {
         this.#clearPoints();
         this.#displayPoints(this.#eventsModel[type]);
@@ -27,7 +28,11 @@ export default class SortPresenter {
       }
     });
     if (this.#eventsModel.points.length > 0) {
-      render(sortElement, this.#sortContainer, RenderPosition.AFTERBEGIN);
+      render(this.#sortedComponent, this.#sortContainer, RenderPosition.AFTERBEGIN);
     }
+  }
+
+  destroy() {
+    remove(this.#sortedComponent);
   }
 }
