@@ -127,6 +127,7 @@ export default class ListPresenter {
 
   async init() {
     const result = await getAllPoints();
+    this.#eventsModel.setAllPoints(result);
     this.#headerPresenter = new HeaderPresenter({
       eventsModel: this.#eventsModel,
       headerContainer: this.#headerContainer,
