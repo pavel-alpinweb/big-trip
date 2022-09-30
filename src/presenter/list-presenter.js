@@ -5,6 +5,8 @@ import HeaderPresenter from './header-presenter.js';
 import PointPresenter from './point-presenter.js';
 import FiltersPresenter from './filters-presenter.js';
 import SortPresenter from './sort-presenter';
+import {getAllPoints, getAllDestinations, getAllOffers, createPoint} from '../mock/mock';
+import {UI_UPDATE_TYPES} from '../utils/constants';
 
 export default class ListPresenter {
   #eventsModel = null;
@@ -26,6 +28,7 @@ export default class ListPresenter {
     this.#headerContainer = document.querySelector('.trip-main');
     this.#filtersContainer = document.querySelector('.trip-controls__filters');
     this.#sortContainer = document.querySelector('.trip-events__list');
+    this.#eventsModel.addObserver(this.#updateUI);
   }
 
   resetAllPointsView = () => {
@@ -66,10 +69,20 @@ export default class ListPresenter {
     this.#newPointFormComponent.setCloseClickHandler(() => {
       this.closeNewPointForm(buttonComponent, onEscKeyDown);
     });
-    this.#newPointFormComponent.setSubmitHandler(() => {
-      this.closeNewPointForm(buttonComponent, onEscKeyDown);
+    this.#newPointFormComponent.setSubmitHandler(async (isNewPoint, point) => {
+      if (isNewPoint) {
+        const result = await createPoint(point);
+        this.#eventsModel.pushNewPoint(result);
+        this.closeNewPointForm(buttonComponent, onEscKeyDown);
+      }
     });
     render(this.#newPointFormComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
+    this.clearPoints();
+    this.displayPoints(this.#eventsModel.pointsSortedByDay);
+    this.#filtersPresenter.destroy();
+    this.#sortPresenter.destroy();
+    this.#initSort();
+    this.#initFilters();
     document.addEventListener('keydown', onEscKeyDown);
   };
 
@@ -98,7 +111,27 @@ export default class ListPresenter {
     this.#pointPresentersMap.clear();
   };
 
-  init() {
+  #initFilters() {
+    this.#filtersPresenter = new FiltersPresenter({
+      eventsModel: this.#eventsModel,
+      filtersContainer: this.#filtersContainer,
+      clearPoints: this.clearPoints,
+      displayPoints: this.displayPoints,
+    });
+    this.#filtersPresenter.init();
+  }
+
+  #initSort() {
+    this.#sortPresenter = new SortPresenter({
+      eventsModel: this.#eventsModel,
+      sortContainer: this.#sortContainer,
+      clearPoints: this.clearPoints,
+      displayPoints: this.displayPoints,
+    });
+    this.#sortPresenter.init();
+  }
+
+  #initHeader() {
     this.#headerPresenter = new HeaderPresenter({
       eventsModel: this.#eventsModel,
       headerContainer: this.#headerContainer,
@@ -107,20 +140,34 @@ export default class ListPresenter {
       clearPoints: this.clearPoints,
     });
     this.#headerPresenter.init();
-    this.#filtersPresenter = new FiltersPresenter({
-      eventsModel: this.#eventsModel,
-      filtersContainer: this.#filtersContainer,
-      clearPoints: this.clearPoints,
-      displayPoints: this.displayPoints,
-    });
-    this.#filtersPresenter.init();
-    this.#sortPresenter = new SortPresenter({
-      eventsModel: this.#eventsModel,
-      sortContainer: this.#sortContainer,
-      clearPoints: this.clearPoints,
-      displayPoints: this.displayPoints,
-    });
-    this.#sortPresenter.init();
+  }
+
+  #updateUI = (type, point) => {
+    if (type === UI_UPDATE_TYPES.ALL) {
+      this.#filtersPresenter.destroy();
+      this.#sortPresenter.destroy();
+      this.#headerPresenter.destroy();
+      this.#initFilters();
+      this.#initSort();
+      this.#initHeader();
+      this.clearPoints();
+      this.displayPoints(this.#eventsModel.pointsSortedByDay);
+    } else if (type === UI_UPDATE_TYPES.POINT) {
+      const currentPointPresenter = this.#pointPresentersMap.get(point.id);
+      currentPointPresenter.init(point);
+    }
+  };
+
+  async init() {
+    const destinations = await getAllDestinations();
+    const points = await getAllPoints();
+    const offers = await getAllOffers();
+    this.#eventsModel.setAllDestinations(destinations);
+    this.#eventsModel.setAllPoints(points);
+    this.#eventsModel.setAllOffers(offers);
+    this.#initHeader();
+    this.#initFilters();
+    this.#initSort();
     if (this.#eventsModel.points.length === 0) {
       render(new EmptyMessage, this.#listContainer);
     } else {

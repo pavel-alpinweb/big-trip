@@ -1,5 +1,5 @@
 import {nanoid} from 'nanoid';
-import {TYPES} from '../utils/constants.js';
+import {TYPES, DATES, POINTS_NAMES} from '../utils/constants.js';
 import {getRandomInteger} from '../utils/helpers.js';
 
 export const generateDestination = (name, i) => ({
@@ -38,4 +38,38 @@ export const generatePoint = (dateFrom, dateTo) => ({
   'type': Object.values(TYPES)[getRandomInteger(0, Object.values(TYPES).length - 1)],
 });
 
-export const updatePoint = (point) => point;
+export const updatePoint = (point) => new Promise((resolve) => {
+  setTimeout(() => {
+    resolve(point);
+  }, 2000);
+});
+
+export const createPoint = (point) => new Promise((resolve) => {
+  setTimeout(() => {
+    resolve(point);
+  }, 2000);
+});
+
+export const getAllPoints = () => new Promise((resolve) => {
+  setTimeout(() => {
+    resolve(Array.from(DATES, ([dateFrom, dateTo]) => generatePoint(dateFrom, dateTo)));
+  }, 1000);
+});
+
+export const getAllDestinations = () => new Promise((resolve) => {
+  setTimeout(() => {
+    resolve(Array.from(POINTS_NAMES, (index, name) => generateDestination(index, name)));
+  }, 1000);
+});
+
+export const getAllOffers = () => new Promise((resolve) => {
+  setTimeout(() => {
+    resolve(generateOffersByTypeArray());
+  }, 1000);
+});
+
+export const deletePoints = (id) => new Promise((resolve) => {
+  setTimeout(() => {
+    resolve(`OK id:${id}`);
+  }, 1000);
+});

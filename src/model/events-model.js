@@ -1,10 +1,10 @@
-import {generateDestination, generatePoint, generateOffersByTypeArray} from '../mock/mock.js';
+import Observable from '../framework/observable.js';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+import {UI_UPDATE_TYPES} from '../utils/constants.js';
 dayjs.extend(duration);
-import {DATES, POINTS_NAMES} from '../utils/constants';
 
-export default class EventsModel {
+export default class EventsModel extends Observable {
   #localPoint = {
     'base_price': '',
     'date_from': new Date(),
@@ -16,9 +16,9 @@ export default class EventsModel {
     'id': '0',
   };
 
-  #points = Array.from(DATES, ([dateFrom, dateTo]) => generatePoint(dateFrom, dateTo));
-  #offers = generateOffersByTypeArray();
-  #destinations = Array.from(POINTS_NAMES, (index, name) => generateDestination(index, name));
+  #points = [];
+  #offers = [];
+  #destinations = [];
 
   get localPoint() {
     return this.#localPoint;
@@ -133,8 +133,31 @@ export default class EventsModel {
 
   getDestinationByName = (name) => this.#destinations.find((item) => item.name === name);
 
-  updateCurrentPoint(updatedPoint) {
+  updateCurrentPoint(updateType, updatedPoint) {
     const index = this.#points.findIndex((point) => point.id === updatedPoint.id);
     this.#points.splice(index, 1, updatedPoint);
+    this._notify(updateType, updatedPoint);
+  }
+
+  deleteCurrentPoint(id) {
+    this.#points = this.#points.filter((item) => item.id !== id);
+    this._notify(UI_UPDATE_TYPES.ALL);
+  }
+
+  pushNewPoint(point) {
+    this.#points.push(point);
+    this._notify(UI_UPDATE_TYPES.ALL);
+  }
+
+  setAllPoints(points) {
+    this.#points = points;
+  }
+
+  setAllDestinations(destinations) {
+    this.#destinations = destinations;
+  }
+
+  setAllOffers(offers) {
+    this.#offers = offers;
   }
 }

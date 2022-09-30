@@ -217,19 +217,19 @@ const createPointFormTemplate = (props) => `
       </div>
 
       <div class="event__field-group  event__field-group--time">
-        <label class="visually-hidden" for="event-start-time-1">From</label>
+        <label class="visually-hidden" for="event-start-time-${props.point.id}">From</label>
         <input class="event__input  event__input--time" id="event-start-time-${props.point.id}" type="text" name="event-start-time" value="${formatEventDateTime(props.point.date_from)}">
         &mdash;
-        <label class="visually-hidden" for="event-end-time-1">To</label>
+        <label class="visually-hidden" for="event-end-time-${props.point.id}">To</label>
         <input class="event__input  event__input--time" id="event-end-time-${props.point.id}" type="text" name="event-end-time" value="${formatEventDateTime(props.point.date_to)}">
       </div>
 
       <div class="event__field-group  event__field-group--price">
-        <label class="event__label" for="event-price-1">
+        <label class="event__label" for="event-price-${props.point.id}">
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${props.point.base_price}">
+        <input class="event__input  event__input--price" id="event-price-${props.point.id}" type="text" name="event-price" value="${props.point.base_price}">
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -280,6 +280,9 @@ export default class PointForm extends AbstractStatefulView{
     });
     this.element.querySelector('#event-destination-1').addEventListener('change', (event) => {
       this.#changePointDestination(event.target.value);
+    });
+    this.element.querySelector(`#event-price-${this.props.point.id}`).addEventListener('input', (event) => {
+      this.#changePointPrice(event.target.value);
     });
     const inputCheckBoxes = this.element.querySelectorAll('.event__offer-checkbox');
     inputCheckBoxes.forEach((el) => {
@@ -357,6 +360,15 @@ export default class PointForm extends AbstractStatefulView{
     });
   }
 
+  #changePointPrice(price) {
+    this._setState({
+      point: {
+        ...this._state.point,
+        'base_price': Number(price),
+      },
+    });
+  }
+
   #changePointOffersList(id) {
     const idIndex = this._state.point.offers.indexOf(Number(id));
     const offersArray = [...this._state.point.offers];
@@ -375,6 +387,10 @@ export default class PointForm extends AbstractStatefulView{
 
   #changePointDestination(name) {
     this.updateElement({
+      point: {
+        ...this._state.point,
+        destination: this.#getDestinationByName(name).id,
+      },
       destination: this.#getDestinationByName(name),
     });
   }
@@ -401,7 +417,9 @@ export default class PointForm extends AbstractStatefulView{
 
   setSubmitHandler = (callback) => {
     this._callback.submit = callback;
-    this.element.querySelector('form').addEventListener('submit', this.#submitHandler);
+    this.element.querySelector('form').addEventListener('submit', (event) => {
+      this.#submitHandler(event, this.props.isNewPoint, this._state.point);
+    });
   };
 
   _restoreHandlers = () => {
@@ -427,8 +445,8 @@ export default class PointForm extends AbstractStatefulView{
     this._callback.closeClick = null;
   };
 
-  #submitHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.submit();
+  #submitHandler = (event, isNewPoint, point) => {
+    event.preventDefault();
+    this._callback.submit(isNewPoint, point);
   };
 }

@@ -1,6 +1,6 @@
 import {render, remove} from '../framework/render.js';
-import {updatePoint} from '../mock/mock.js';
-import {POINT_MODES} from '../utils/constants.js';
+import {deletePoints, updatePoint} from '../mock/mock.js';
+import {POINT_MODES, UI_UPDATE_TYPES} from '../utils/constants.js';
 import PointForm from '../view/point-form.js';
 import Point from '../view/point.js';
 
@@ -11,16 +11,19 @@ export default class PointPresenter {
   #eventsModel = null;
   #resetView = null;
   #mode = POINT_MODES.DEFAULT;
+  #point = null;
+  #offersArray = null;
+  #allOffers = null;
+  #destination = null;
+  #destinationsList = null;
   constructor({listContainer, point, offersArray, allOffers, destination, eventsModel, reset, destinationsList}) {
     this.#listContainer = listContainer;
     this.#eventsModel = eventsModel;
-    this.#pointComponent = new Point({point, offersArray, destination});
-    this.#pontFormComponent = new PointForm({
-      props: {point, offersArray: allOffers, destination, destinationsList, isNewPoint: false},
-      getOffersList: this.#eventsModel.getOffersListByIds,
-      getDestinationByName: this.#eventsModel.getDestinationByName,
-      getOffersListByType: this.#eventsModel.getOffersListByType,
-    });
+    this.#point = point;
+    this.#offersArray = offersArray;
+    this.#allOffers = allOffers;
+    this.#destination = destination;
+    this.#destinationsList = destinationsList;
     this.#resetView = reset;
   }
 
@@ -35,14 +38,14 @@ export default class PointPresenter {
     }
   }
 
-  #renderPoint() {
+  #initPoint() {
 
-    this.#pointComponent.setClickFavoriteHandler(() => {
-      const result = updatePoint({
+    this.#pointComponent.setClickFavoriteHandler(async () => {
+      const result = await updatePoint({
         ...this.#pointComponent.props.point,
         'is_favorite': !this.#pointComponent.props.point['is_favorite']
       });
-      this.#eventsModel.updateCurrentPoint(result);
+      this.#eventsModel.updateCurrentPoint(UI_UPDATE_TYPES.POINT, result);
     });
 
     const onEscKeyDown = (evt) => {
@@ -69,23 +72,52 @@ export default class PointPresenter {
       document.removeEventListener('keydown', onEscKeyDown);
     });
 
-    this.#pontFormComponent.setDeleteClickHandler(() => {
+    this.#pontFormComponent.setDeleteClickHandler(async () => {
       this.#mode = POINT_MODES.DEFAULT;
+      const id = this.#pontFormComponent.props.point.id;
+      await deletePoints(this.#pontFormComponent.props.point.id);
+      this.#eventsModel.deleteCurrentPoint(id);
       this.#pontFormComponent.resetState();
       this.replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
       document.removeEventListener('keydown', onEscKeyDown);
     });
 
-    this.#pontFormComponent.setSubmitHandler(() => {
+    this.#pontFormComponent.setSubmitHandler(async (isNewPoint, point) => {
+      if (!isNewPoint) {
+        const result = await updatePoint(point);
+        this.#eventsModel.updateCurrentPoint(UI_UPDATE_TYPES.ALL, result);
+      }
       this.#mode = POINT_MODES.DEFAULT;
       this.replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
     });
-
-    render(this.#pointComponent, this.#listContainer);
   }
 
-  init() {
-    this.#renderPoint();
+  init(point = this.#point) {
+    const prevPointComponent = this.#pointComponent;
+    const prevPontFormComponent = this.#pontFormComponent;
+    this.#pointComponent = new Point({
+      point,
+      offersArray: this.#offersArray,
+      destination: this.#destination
+    });
+    this.#pontFormComponent = new PointForm({
+      props: {
+        point: this.#point,
+        offersArray: this.#allOffers,
+        destination: this.#destination,
+        destinationsList: this.#destinationsList,
+        isNewPoint: false
+      },
+      getOffersList: this.#eventsModel.getOffersListByIds,
+      getDestinationByName: this.#eventsModel.getDestinationByName,
+      getOffersListByType: this.#eventsModel.getOffersListByType,
+    });
+    this.#initPoint();
+    if (prevPointComponent === null || prevPontFormComponent === null) {
+      render(this.#pointComponent, this.#listContainer);
+    } else {
+      this.replaceComponents(this.#pointComponent.element, prevPointComponent.element);
+    }
   }
 
   destroy() {
