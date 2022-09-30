@@ -132,9 +132,10 @@ export default class EventsModel extends Observable {
 
   getDestinationByName = (name) => this.#destinations.find((item) => item.name === name);
 
-  updateCurrentPoint(updatedPoint) {
+  updateCurrentPoint(updateType, updatedPoint) {
     const index = this.#points.findIndex((point) => point.id === updatedPoint.id);
     this.#points.splice(index, 1, updatedPoint);
+    this._notify(updateType, updatedPoint);
   }
 
   deleteCurrentPoint(id) {

@@ -6,6 +6,7 @@ import PointPresenter from './point-presenter.js';
 import FiltersPresenter from './filters-presenter.js';
 import SortPresenter from './sort-presenter';
 import {getAllPoints, getAllDestinations, getAllOffers, createPoint} from '../mock/mock';
+import {UI_UPDATE_TYPES} from '../utils/constants';
 
 export default class ListPresenter {
   #eventsModel = null;
@@ -27,6 +28,7 @@ export default class ListPresenter {
     this.#headerContainer = document.querySelector('.trip-main');
     this.#filtersContainer = document.querySelector('.trip-controls__filters');
     this.#sortContainer = document.querySelector('.trip-events__list');
+    this.#eventsModel.addObserver(this.#updateUI);
   }
 
   resetAllPointsView = () => {
@@ -128,6 +130,15 @@ export default class ListPresenter {
     });
     this.#sortPresenter.init();
   }
+
+  #updateUI = (type) => {
+    if (type === UI_UPDATE_TYPES.ALL) {
+      this.#filtersPresenter.destroy();
+      this.#sortPresenter.destroy();
+      this.#initFilters();
+      this.#initSort();
+    }
+  };
 
   async init() {
     const destinations = await getAllDestinations();

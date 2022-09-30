@@ -1,6 +1,6 @@
 import {render, remove} from '../framework/render.js';
 import {deletePoints, updatePoint} from '../mock/mock.js';
-import {POINT_MODES} from '../utils/constants.js';
+import {POINT_MODES, UI_UPDATE_TYPES} from '../utils/constants.js';
 import PointForm from '../view/point-form.js';
 import Point from '../view/point.js';
 
@@ -42,7 +42,7 @@ export default class PointPresenter {
         ...this.#pointComponent.props.point,
         'is_favorite': !this.#pointComponent.props.point['is_favorite']
       });
-      this.#eventsModel.updateCurrentPoint(result);
+      this.#eventsModel.updateCurrentPoint(UI_UPDATE_TYPES.POINT, result);
     });
 
     const onEscKeyDown = (evt) => {
@@ -82,7 +82,7 @@ export default class PointPresenter {
     this.#pontFormComponent.setSubmitHandler(async (isNewPoint, point) => {
       if (!isNewPoint) {
         const result = await updatePoint(point);
-        this.#eventsModel.updateCurrentPoint(result);
+        this.#eventsModel.updateCurrentPoint(UI_UPDATE_TYPES.ALL, result);
       }
       this.#mode = POINT_MODES.DEFAULT;
       this.replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
