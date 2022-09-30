@@ -137,6 +137,8 @@ export default class ListPresenter {
       this.#sortPresenter.destroy();
       this.#initFilters();
       this.#initSort();
+      this.clearPoints();
+      this.displayPoints(this.#eventsModel.pointsSortedByDay);
     }
   };
 

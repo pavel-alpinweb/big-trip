@@ -1,6 +1,7 @@
 import Observable from '../framework/observable.js';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+import {UI_UPDATE_TYPES} from '../utils/constants.js';
 dayjs.extend(duration);
 
 export default class EventsModel extends Observable {
@@ -140,10 +141,12 @@ export default class EventsModel extends Observable {
 
   deleteCurrentPoint(id) {
     this.#points = this.#points.filter((item) => item.id !== id);
+    this._notify(UI_UPDATE_TYPES.all);
   }
 
   pushNewPoint(point) {
     this.#points.push(point);
+    this._notify(UI_UPDATE_TYPES.all);
   }
 
   setAllPoints(points) {
