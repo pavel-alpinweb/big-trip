@@ -217,19 +217,19 @@ const createPointFormTemplate = (props) => `
       </div>
 
       <div class="event__field-group  event__field-group--time">
-        <label class="visually-hidden" for="event-start-time-1">From</label>
+        <label class="visually-hidden" for="event-start-time-${props.point.id}">From</label>
         <input class="event__input  event__input--time" id="event-start-time-${props.point.id}" type="text" name="event-start-time" value="${formatEventDateTime(props.point.date_from)}">
         &mdash;
-        <label class="visually-hidden" for="event-end-time-1">To</label>
+        <label class="visually-hidden" for="event-end-time-${props.point.id}">To</label>
         <input class="event__input  event__input--time" id="event-end-time-${props.point.id}" type="text" name="event-end-time" value="${formatEventDateTime(props.point.date_to)}">
       </div>
 
       <div class="event__field-group  event__field-group--price">
-        <label class="event__label" for="event-price-1">
+        <label class="event__label" for="event-price-${props.point.id}">
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${props.point.base_price}">
+        <input class="event__input  event__input--price" id="event-price-${props.point.id}" type="text" name="event-price" value="${props.point.base_price}">
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -280,6 +280,9 @@ export default class PointForm extends AbstractStatefulView{
     });
     this.element.querySelector('#event-destination-1').addEventListener('change', (event) => {
       this.#changePointDestination(event.target.value);
+    });
+    this.element.querySelector(`#event-price-${this.props.point.id}`).addEventListener('input', (event) => {
+      this.#changePointPrice(event.target.value);
     });
     const inputCheckBoxes = this.element.querySelectorAll('.event__offer-checkbox');
     inputCheckBoxes.forEach((el) => {
@@ -354,6 +357,15 @@ export default class PointForm extends AbstractStatefulView{
         type,
       },
       offersArray: this.#getOffersListByType(type),
+    });
+  }
+
+  #changePointPrice(price) {
+    this._setState({
+      point: {
+        ...this._state.point,
+        'base_price': Number(price),
+      },
     });
   }
 
