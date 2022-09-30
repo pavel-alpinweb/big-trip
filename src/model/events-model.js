@@ -1,8 +1,9 @@
+import Observable from '../framework/observable.js';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
 
-export default class EventsModel {
+export default class EventsModel extends Observable {
   #localPoint = {
     'base_price': '',
     'date_from': new Date(),

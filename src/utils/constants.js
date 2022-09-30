@@ -40,3 +40,8 @@ export const FILTERS_MODES = {
   FUTURE: 'futurePoints',
   PAST: 'pastPoints',
 };
+
+export const UI_UPDATE_TYPES = {
+  ALL: 'ALL',
+  POINT: 'POINT',
+};
