@@ -38,7 +38,17 @@ export const generatePoint = (dateFrom, dateTo) => ({
   'type': Object.values(TYPES)[getRandomInteger(0, Object.values(TYPES).length - 1)],
 });
 
-export const updatePoint = (point) => point;
+export const updatePoint = (point) => new Promise((resolve) => {
+  setTimeout(() => {
+    resolve(point);
+  }, 2000);
+});
+
+export const createPoint = (point) => new Promise((resolve) => {
+  setTimeout(() => {
+    resolve(point);
+  }, 2000);
+});
 
 export const getAllPoints = () => new Promise((resolve) => {
   setTimeout(() => {

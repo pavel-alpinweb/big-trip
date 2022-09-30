@@ -37,8 +37,8 @@ export default class PointPresenter {
 
   #renderPoint() {
 
-    this.#pointComponent.setClickFavoriteHandler(() => {
-      const result = updatePoint({
+    this.#pointComponent.setClickFavoriteHandler(async () => {
+      const result = await updatePoint({
         ...this.#pointComponent.props.point,
         'is_favorite': !this.#pointComponent.props.point['is_favorite']
       });
@@ -76,7 +76,11 @@ export default class PointPresenter {
       document.removeEventListener('keydown', onEscKeyDown);
     });
 
-    this.#pontFormComponent.setSubmitHandler(() => {
+    this.#pontFormComponent.setSubmitHandler(async (isNewPoint, point) => {
+      if (!isNewPoint) {
+        const result = await updatePoint(point);
+        this.#eventsModel.updateCurrentPoint(result);
+      }
       this.#mode = POINT_MODES.DEFAULT;
       this.replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
     });

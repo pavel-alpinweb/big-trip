@@ -136,6 +136,10 @@ export default class EventsModel {
     this.#points.splice(index, 1, updatedPoint);
   }
 
+  pushNewPoint(point) {
+    this.#points.push(point);
+  }
+
   setAllPoints(points) {
     this.#points = points;
   }

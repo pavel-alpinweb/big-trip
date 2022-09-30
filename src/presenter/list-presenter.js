@@ -5,7 +5,7 @@ import HeaderPresenter from './header-presenter.js';
 import PointPresenter from './point-presenter.js';
 import FiltersPresenter from './filters-presenter.js';
 import SortPresenter from './sort-presenter';
-import {getAllPoints, getAllDestinations, getAllOffers} from '../mock/mock';
+import {getAllPoints, getAllDestinations, getAllOffers, createPoint} from '../mock/mock';
 
 export default class ListPresenter {
   #eventsModel = null;
@@ -67,8 +67,12 @@ export default class ListPresenter {
     this.#newPointFormComponent.setCloseClickHandler(() => {
       this.closeNewPointForm(buttonComponent, onEscKeyDown);
     });
-    this.#newPointFormComponent.setSubmitHandler(() => {
-      this.closeNewPointForm(buttonComponent, onEscKeyDown);
+    this.#newPointFormComponent.setSubmitHandler(async (isNewPoint, point) => {
+      if (isNewPoint) {
+        const result = await createPoint(point);
+        this.#eventsModel.pushNewPoint(result);
+        this.closeNewPointForm(buttonComponent, onEscKeyDown);
+      }
     });
     render(this.#newPointFormComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
     this.clearPoints();

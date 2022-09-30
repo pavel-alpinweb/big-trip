@@ -375,6 +375,10 @@ export default class PointForm extends AbstractStatefulView{
 
   #changePointDestination(name) {
     this.updateElement({
+      point: {
+        ...this._state.point,
+        destination: this.#getDestinationByName(name).id,
+      },
       destination: this.#getDestinationByName(name),
     });
   }
@@ -401,7 +405,9 @@ export default class PointForm extends AbstractStatefulView{
 
   setSubmitHandler = (callback) => {
     this._callback.submit = callback;
-    this.element.querySelector('form').addEventListener('submit', this.#submitHandler);
+    this.element.querySelector('form').addEventListener('submit', (event) => {
+      this.#submitHandler(event, this.props.isNewPoint, this._state.point);
+    });
   };
 
   _restoreHandlers = () => {
@@ -427,8 +433,8 @@ export default class PointForm extends AbstractStatefulView{
     this._callback.closeClick = null;
   };
 
-  #submitHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.submit();
+  #submitHandler = (event, isNewPoint, point) => {
+    event.preventDefault();
+    this._callback.submit(isNewPoint, point);
   };
 }
