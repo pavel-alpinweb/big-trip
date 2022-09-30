@@ -11,16 +11,19 @@ export default class PointPresenter {
   #eventsModel = null;
   #resetView = null;
   #mode = POINT_MODES.DEFAULT;
+  #point = null;
+  #offersArray = null;
+  #allOffers = null;
+  #destination = null;
+  #destinationsList = null;
   constructor({listContainer, point, offersArray, allOffers, destination, eventsModel, reset, destinationsList}) {
     this.#listContainer = listContainer;
     this.#eventsModel = eventsModel;
-    this.#pointComponent = new Point({point, offersArray, destination});
-    this.#pontFormComponent = new PointForm({
-      props: {point, offersArray: allOffers, destination, destinationsList, isNewPoint: false},
-      getOffersList: this.#eventsModel.getOffersListByIds,
-      getDestinationByName: this.#eventsModel.getDestinationByName,
-      getOffersListByType: this.#eventsModel.getOffersListByType,
-    });
+    this.#point = point;
+    this.#offersArray = offersArray;
+    this.#allOffers = allOffers;
+    this.#destination = destination;
+    this.#destinationsList = destinationsList;
     this.#resetView = reset;
   }
 
@@ -35,7 +38,7 @@ export default class PointPresenter {
     }
   }
 
-  #renderPoint() {
+  #initPoint() {
 
     this.#pointComponent.setClickFavoriteHandler(async () => {
       const result = await updatePoint({
@@ -87,12 +90,34 @@ export default class PointPresenter {
       this.#mode = POINT_MODES.DEFAULT;
       this.replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
     });
-
-    render(this.#pointComponent, this.#listContainer);
   }
 
-  init() {
-    this.#renderPoint();
+  init(point = this.#point) {
+    const prevPointComponent = this.#pointComponent;
+    const prevPontFormComponent = this.#pontFormComponent;
+    this.#pointComponent = new Point({
+      point,
+      offersArray: this.#offersArray,
+      destination: this.#destination
+    });
+    this.#pontFormComponent = new PointForm({
+      props: {
+        point: this.#point,
+        offersArray: this.#allOffers,
+        destination: this.#destination,
+        destinationsList: this.#destinationsList,
+        isNewPoint: false
+      },
+      getOffersList: this.#eventsModel.getOffersListByIds,
+      getDestinationByName: this.#eventsModel.getDestinationByName,
+      getOffersListByType: this.#eventsModel.getOffersListByType,
+    });
+    this.#initPoint();
+    if (prevPointComponent === null || prevPontFormComponent === null) {
+      render(this.#pointComponent, this.#listContainer);
+    } else {
+      this.replaceComponents(this.#pointComponent.element, prevPointComponent.element);
+    }
   }
 
   destroy() {

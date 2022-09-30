@@ -142,7 +142,7 @@ export default class ListPresenter {
     this.#headerPresenter.init();
   }
 
-  #updateUI = (type) => {
+  #updateUI = (type, point) => {
     if (type === UI_UPDATE_TYPES.ALL) {
       this.#filtersPresenter.destroy();
       this.#sortPresenter.destroy();
@@ -152,6 +152,9 @@ export default class ListPresenter {
       this.#initHeader();
       this.clearPoints();
       this.displayPoints(this.#eventsModel.pointsSortedByDay);
+    } else if (type === UI_UPDATE_TYPES.POINT) {
+      const currentPointPresenter = this.#pointPresentersMap.get(point.id);
+      currentPointPresenter.init(point);
     }
   };
 
