@@ -1,5 +1,5 @@
 import {nanoid} from 'nanoid';
-import {TYPES} from '../utils/constants.js';
+import {TYPES, DATES} from '../utils/constants.js';
 import {getRandomInteger} from '../utils/helpers.js';
 
 export const generateDestination = (name, i) => ({
@@ -39,3 +39,9 @@ export const generatePoint = (dateFrom, dateTo) => ({
 });
 
 export const updatePoint = (point) => point;
+
+export const getAllPoints = () => new Promise((resolve) => {
+  setTimeout(() => {
+    resolve(Array.from(DATES, ([dateFrom, dateTo]) => generatePoint(dateFrom, dateTo)));
+  }, 2000);
+});
