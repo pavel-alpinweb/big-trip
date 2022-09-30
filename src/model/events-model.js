@@ -1,4 +1,3 @@
-import {generateOffersByTypeArray} from '../mock/mock.js';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
@@ -16,7 +15,7 @@ export default class EventsModel {
   };
 
   #points = [];
-  #offers = generateOffersByTypeArray();
+  #offers = [];
   #destinations = [];
 
   get localPoint() {
@@ -143,5 +142,9 @@ export default class EventsModel {
 
   setAllDestinations(destinations) {
     this.#destinations = destinations;
+  }
+
+  setAllOffers(offers) {
+    this.#offers = offers;
   }
 }

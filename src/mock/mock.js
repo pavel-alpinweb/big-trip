@@ -51,3 +51,9 @@ export const getAllDestinations = () => new Promise((resolve) => {
     resolve(Array.from(POINTS_NAMES, (index, name) => generateDestination(index, name)));
   }, 1000);
 });
+
+export const getAllOffers = () => new Promise((resolve) => {
+  setTimeout(() => {
+    resolve(generateOffersByTypeArray());
+  }, 1000);
+});

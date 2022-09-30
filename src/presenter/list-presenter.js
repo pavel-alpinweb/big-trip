@@ -5,7 +5,7 @@ import HeaderPresenter from './header-presenter.js';
 import PointPresenter from './point-presenter.js';
 import FiltersPresenter from './filters-presenter.js';
 import SortPresenter from './sort-presenter';
-import {getAllPoints, getAllDestinations} from '../mock/mock';
+import {getAllPoints, getAllDestinations, getAllOffers} from '../mock/mock';
 
 export default class ListPresenter {
   #eventsModel = null;
@@ -128,8 +128,10 @@ export default class ListPresenter {
   async init() {
     const destinations = await getAllDestinations();
     const points = await getAllPoints();
+    const offers = await getAllOffers();
     this.#eventsModel.setAllDestinations(destinations);
     this.#eventsModel.setAllPoints(points);
+    this.#eventsModel.setAllOffers(offers);
     this.#headerPresenter = new HeaderPresenter({
       eventsModel: this.#eventsModel,
       headerContainer: this.#headerContainer,
