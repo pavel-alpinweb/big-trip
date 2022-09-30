@@ -131,12 +131,25 @@ export default class ListPresenter {
     this.#sortPresenter.init();
   }
 
+  #initHeader() {
+    this.#headerPresenter = new HeaderPresenter({
+      eventsModel: this.#eventsModel,
+      headerContainer: this.#headerContainer,
+      openNewPointForm: this.openNewPointForm,
+      displayPoints: this.displayPoints,
+      clearPoints: this.clearPoints,
+    });
+    this.#headerPresenter.init();
+  }
+
   #updateUI = (type) => {
     if (type === UI_UPDATE_TYPES.ALL) {
       this.#filtersPresenter.destroy();
       this.#sortPresenter.destroy();
+      this.#headerPresenter.destroy();
       this.#initFilters();
       this.#initSort();
+      this.#initHeader();
       this.clearPoints();
       this.displayPoints(this.#eventsModel.pointsSortedByDay);
     }
@@ -149,14 +162,7 @@ export default class ListPresenter {
     this.#eventsModel.setAllDestinations(destinations);
     this.#eventsModel.setAllPoints(points);
     this.#eventsModel.setAllOffers(offers);
-    this.#headerPresenter = new HeaderPresenter({
-      eventsModel: this.#eventsModel,
-      headerContainer: this.#headerContainer,
-      openNewPointForm: this.openNewPointForm,
-      displayPoints: this.displayPoints,
-      clearPoints: this.clearPoints,
-    });
-    this.#headerPresenter.init();
+    this.#initHeader();
     this.#initFilters();
     this.#initSort();
     if (this.#eventsModel.points.length === 0) {

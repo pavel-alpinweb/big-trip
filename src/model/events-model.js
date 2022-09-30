@@ -141,12 +141,12 @@ export default class EventsModel extends Observable {
 
   deleteCurrentPoint(id) {
     this.#points = this.#points.filter((item) => item.id !== id);
-    this._notify(UI_UPDATE_TYPES.all);
+    this._notify(UI_UPDATE_TYPES.ALL);
   }
 
   pushNewPoint(point) {
     this.#points.push(point);
-    this._notify(UI_UPDATE_TYPES.all);
+    this._notify(UI_UPDATE_TYPES.ALL);
   }
 
   setAllPoints(points) {
