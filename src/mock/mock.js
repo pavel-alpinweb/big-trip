@@ -67,3 +67,9 @@ export const getAllOffers = () => new Promise((resolve) => {
     resolve(generateOffersByTypeArray());
   }, 1000);
 });
+
+export const deletePoints = (id) => new Promise((resolve) => {
+  setTimeout(() => {
+    resolve(`OK id:${id}`);
+  }, 1000);
+});

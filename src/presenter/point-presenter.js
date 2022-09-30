@@ -1,5 +1,5 @@
 import {render, remove} from '../framework/render.js';
-import {updatePoint} from '../mock/mock.js';
+import {deletePoints, updatePoint} from '../mock/mock.js';
 import {POINT_MODES} from '../utils/constants.js';
 import PointForm from '../view/point-form.js';
 import Point from '../view/point.js';
@@ -69,8 +69,11 @@ export default class PointPresenter {
       document.removeEventListener('keydown', onEscKeyDown);
     });
 
-    this.#pontFormComponent.setDeleteClickHandler(() => {
+    this.#pontFormComponent.setDeleteClickHandler(async () => {
       this.#mode = POINT_MODES.DEFAULT;
+      const id = this.#pontFormComponent.props.point.id;
+      await deletePoints(this.#pontFormComponent.props.point.id);
+      this.#eventsModel.deleteCurrentPoint(id);
       this.#pontFormComponent.resetState();
       this.replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
       document.removeEventListener('keydown', onEscKeyDown);

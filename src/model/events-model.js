@@ -136,6 +136,10 @@ export default class EventsModel {
     this.#points.splice(index, 1, updatedPoint);
   }
 
+  deleteCurrentPoint(id) {
+    this.#points = this.#points.filter((item) => item.id !== id);
+  }
+
   pushNewPoint(point) {
     this.#points.push(point);
   }
