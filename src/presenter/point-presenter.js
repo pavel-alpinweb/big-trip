@@ -16,7 +16,18 @@ export default class PointPresenter {
   #allOffers = null;
   #destination = null;
   #destinationsList = null;
-  constructor({listContainer, point, offersArray, allOffers, destination, eventsModel, reset, destinationsList}) {
+  #pointsService = null;
+  constructor({
+    listContainer,
+    point,
+    offersArray,
+    allOffers,
+    destination,
+    eventsModel,
+    reset,
+    destinationsList,
+    pointsService,
+  }) {
     this.#listContainer = listContainer;
     this.#eventsModel = eventsModel;
     this.#point = point;
@@ -25,6 +36,7 @@ export default class PointPresenter {
     this.#destination = destination;
     this.#destinationsList = destinationsList;
     this.#resetView = reset;
+    this.#pointsService = pointsService;
   }
 
   replaceComponents(newComponent,oldComponent) {
@@ -84,7 +96,7 @@ export default class PointPresenter {
 
     this.#pontFormComponent.setSubmitHandler(async (isNewPoint, point) => {
       if (!isNewPoint) {
-        const result = await updatePoint(point);
+        const result = await this.#pointsService.updatePoint(point);
         this.#eventsModel.updateCurrentPoint(UI_UPDATE_TYPES.ALL, result);
       }
       this.#mode = POINT_MODES.DEFAULT;

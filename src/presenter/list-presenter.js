@@ -5,7 +5,6 @@ import HeaderPresenter from './header-presenter.js';
 import PointPresenter from './point-presenter.js';
 import FiltersPresenter from './filters-presenter.js';
 import SortPresenter from './sort-presenter';
-import {createPoint} from '../mock/mock';
 import {UI_UPDATE_TYPES} from '../utils/constants';
 
 export default class ListPresenter {
@@ -83,7 +82,7 @@ export default class ListPresenter {
     });
     this.#newPointFormComponent.setSubmitHandler(async (isNewPoint, point) => {
       if (isNewPoint) {
-        const result = await createPoint(point);
+        const result = await this.#pointsService.createPoint(point);
         this.#eventsModel.pushNewPoint(result);
         this.closeNewPointForm(buttonComponent, onEscKeyDown);
       }
@@ -105,6 +104,7 @@ export default class ListPresenter {
       const destination = this.#eventsModel.getDestinationById(point.destination);
       const pointPresenter = new PointPresenter({
         listContainer: this.#listContainer,
+        pointsService: this.#pointsService,
         point,
         offersArray,
         allOffers,
