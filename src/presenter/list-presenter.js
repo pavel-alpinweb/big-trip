@@ -20,8 +20,17 @@ export default class ListPresenter {
   #headerContainer = null;
   #newPointFormComponent = null;
   #pointPresentersMap = new Map();
+  #pointsService = null;
+  #offersService = null;
+  #destinationsService = null;
 
-  constructor(eventsModel, listContainer) {
+  constructor({
+    eventsModel,
+    listContainer,
+    pointsService,
+    offersService,
+    destinationsService,
+  }) {
     this.#eventsModel = eventsModel;
     this.#listContainer = listContainer;
     this.#newPoint = this.#eventsModel.localPoint;
@@ -29,6 +38,9 @@ export default class ListPresenter {
     this.#filtersContainer = document.querySelector('.trip-controls__filters');
     this.#sortContainer = document.querySelector('.trip-events__list');
     this.#eventsModel.addObserver(this.#updateUI);
+    this.#pointsService = pointsService;
+    this.#offersService = offersService;
+    this.#destinationsService = destinationsService;
   }
 
   resetAllPointsView = () => {

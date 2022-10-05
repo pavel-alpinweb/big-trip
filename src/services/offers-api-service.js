@@ -3,6 +3,6 @@ import ApiService from '../framework/api-service.js';
 
 export default class OffersApiService extends ApiService{
   async getAllOffers() {
-    return await this._load({url: '/offers'});
+    return await this._load({url: 'offers'});
   }
 }

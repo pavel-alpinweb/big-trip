@@ -52,3 +52,6 @@ export const METHODS = {
   PUT: 'PUT',
   DELETE: 'DELETE',
 };
+
+export const AUTHORIZATION = 'Basic big-trip-sioda';
+export const END_POINT = 'https://18.ecmascript.pages.academy/big-trip/';
