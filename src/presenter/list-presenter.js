@@ -165,10 +165,10 @@ export default class ListPresenter {
       }
       this.#filtersPresenter.destroy();
       this.#sortPresenter.destroy();
-      // this.#headerPresenter.destroy();
+      this.#headerPresenter.destroy();
       this.#initFilters();
       this.#initSort();
-      // this.#initHeader();
+      this.#initHeader();
       this.clearPoints();
       if (this.#eventsModel.points.length === 0) {
         render(new EmptyMessage, this.#listContainer);
@@ -184,6 +184,7 @@ export default class ListPresenter {
   async init() {
     this.#initFilters();
     this.#initSort();
+    this.#initHeader();
     render(this.#loadingMessageComponent, this.#listContainer);
     const destinations = await this.#destinationsService.getAllDestinations();
     const offers = await this.#offersService.getAllOffers();
@@ -191,7 +192,6 @@ export default class ListPresenter {
     this.#eventsModel.setAllDestinations(destinations);
     this.#eventsModel.setAllOffers(offers);
     this.#eventsModel.setAllPoints(points);
-    // this.#initHeader();
     remove(this.#loadingMessageComponent);
     this.#loadingMessageComponent = null;
   }
