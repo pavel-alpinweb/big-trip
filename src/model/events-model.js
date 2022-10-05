@@ -151,6 +151,7 @@ export default class EventsModel extends Observable {
 
   setAllPoints(points) {
     this.#points = points;
+    this._notify(UI_UPDATE_TYPES.ALL);
   }
 
   setAllDestinations(destinations) {

@@ -23,6 +23,7 @@ export default class ListPresenter {
   #pointsService = null;
   #offersService = null;
   #destinationsService = null;
+  #loadingMessageComponent = null;
 
   constructor({
     eventsModel,
@@ -41,6 +42,7 @@ export default class ListPresenter {
     this.#pointsService = pointsService;
     this.#offersService = offersService;
     this.#destinationsService = destinationsService;
+    this.#loadingMessageComponent = new LoadingMessage();
   }
 
   resetAllPointsView = () => {
@@ -157,14 +159,22 @@ export default class ListPresenter {
 
   #updateUI = (type, point) => {
     if (type === UI_UPDATE_TYPES.ALL) {
+      if (this.#loadingMessageComponent) {
+        remove(this.#loadingMessageComponent);
+        this.#loadingMessageComponent = null;
+      }
       this.#filtersPresenter.destroy();
       this.#sortPresenter.destroy();
-      this.#headerPresenter.destroy();
+      // this.#headerPresenter.destroy();
       this.#initFilters();
       this.#initSort();
-      this.#initHeader();
+      // this.#initHeader();
       this.clearPoints();
-      this.displayPoints(this.#eventsModel.pointsSortedByDay);
+      if (this.#eventsModel.points.length === 0) {
+        render(new EmptyMessage, this.#listContainer);
+      } else {
+        this.displayPoints(this.#eventsModel.pointsSortedByDay);
+      }
     } else if (type === UI_UPDATE_TYPES.POINT) {
       const currentPointPresenter = this.#pointPresentersMap.get(point.id);
       currentPointPresenter.init(point);
@@ -172,22 +182,17 @@ export default class ListPresenter {
   };
 
   async init() {
-    const loadingMessageComponent = new LoadingMessage();
-    render(loadingMessageComponent, this.#listContainer);
-    const destinations = await this.#destinationsService.getAllDestinations();
-    const points = await this.#pointsService.getAllPoints();
-    const offers = await this.#offersService.getAllOffers();
-    this.#eventsModel.setAllDestinations(destinations);
-    this.#eventsModel.setAllPoints(points);
-    this.#eventsModel.setAllOffers(offers);
-    this.#initHeader();
     this.#initFilters();
     this.#initSort();
-    remove(loadingMessageComponent);
-    if (this.#eventsModel.points.length === 0) {
-      render(new EmptyMessage, this.#listContainer);
-    } else {
-      this.displayPoints(this.#eventsModel.pointsSortedByDay);
-    }
+    render(this.#loadingMessageComponent, this.#listContainer);
+    const destinations = await this.#destinationsService.getAllDestinations();
+    const offers = await this.#offersService.getAllOffers();
+    const points = await this.#pointsService.getAllPoints();
+    this.#eventsModel.setAllDestinations(destinations);
+    this.#eventsModel.setAllOffers(offers);
+    this.#eventsModel.setAllPoints(points);
+    // this.#initHeader();
+    remove(this.#loadingMessageComponent);
+    this.#loadingMessageComponent = null;
   }
 }
