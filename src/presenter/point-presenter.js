@@ -88,7 +88,6 @@ export default class PointPresenter {
         this.#eventsModel.updateCurrentPoint(UI_UPDATE_TYPES.ALL, result);
       }
       this.#mode = POINT_MODES.DEFAULT;
-      this.replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
     });
   }
 
