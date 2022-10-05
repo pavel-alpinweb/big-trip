@@ -1,11 +1,12 @@
 import {render, remove, RenderPosition} from '../framework/render.js';
 import PointForm from '../view/point-form.js';
 import EmptyMessage from '../view/empty-message.js';
+import LoadingMessage from '../view/loading-message.js';
 import HeaderPresenter from './header-presenter.js';
 import PointPresenter from './point-presenter.js';
 import FiltersPresenter from './filters-presenter.js';
-import SortPresenter from './sort-presenter';
-import {UI_UPDATE_TYPES} from '../utils/constants';
+import SortPresenter from './sort-presenter.js';
+import {UI_UPDATE_TYPES} from '../utils/constants.js';
 
 export default class ListPresenter {
   #eventsModel = null;
@@ -171,6 +172,8 @@ export default class ListPresenter {
   };
 
   async init() {
+    const loadingMessageComponent = new LoadingMessage();
+    render(loadingMessageComponent, this.#listContainer);
     const destinations = await this.#destinationsService.getAllDestinations();
     const points = await this.#pointsService.getAllPoints();
     const offers = await this.#offersService.getAllOffers();
@@ -180,6 +183,7 @@ export default class ListPresenter {
     this.#initHeader();
     this.#initFilters();
     this.#initSort();
+    remove(loadingMessageComponent);
     if (this.#eventsModel.points.length === 0) {
       render(new EmptyMessage, this.#listContainer);
     } else {
