@@ -20,17 +20,21 @@ export default class HeaderPresenter {
 
   init() {
     this.#buttonComponent = new NewEventButton();
-    this.#tripInfoComponent = new TripInfo({
-      totalPrice: this.#eventsModel.totalPrice,
-      pointsNames: this.#eventsModel.pointsNames,
-      tripDuring: this.#eventsModel.tripDuring});
-    this.#buttonComponent.setClickHandler(() => {
-      this.#openNewPointForm(this.#buttonComponent);
-      this.#clearPoints();
-      this.#displayPoints(this.#eventsModel.pointsSortedByDay);
-    });
     render(this.#buttonComponent, this.#headerContainer);
-    render(this.#tripInfoComponent, this.#headerContainer, RenderPosition.AFTERBEGIN);
+    if (this.#eventsModel.totalPrice && this.#eventsModel.pointsNames && this.#eventsModel.tripDuring) {
+      this.#tripInfoComponent = new TripInfo({
+        totalPrice: this.#eventsModel.totalPrice,
+        pointsNames: this.#eventsModel.pointsNames,
+        tripDuring: this.#eventsModel.tripDuring});
+      this.#buttonComponent.setClickHandler(() => {
+        this.#openNewPointForm(this.#buttonComponent);
+        this.#clearPoints();
+        this.#displayPoints(this.#eventsModel.pointsSortedByDay);
+      });
+      render(this.#tripInfoComponent, this.#headerContainer, RenderPosition.AFTERBEGIN);
+    } else {
+      this.#buttonComponent.changeBtnState();
+    }
   }
 
   destroy() {

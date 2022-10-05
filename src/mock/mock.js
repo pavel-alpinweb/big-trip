@@ -1,3 +1,5 @@
+//оставляем этот файл для покрытия тестами в будущем
+
 import {nanoid} from 'nanoid';
 import {TYPES, DATES, POINTS_NAMES} from '../utils/constants.js';
 import {getRandomInteger} from '../utils/helpers.js';

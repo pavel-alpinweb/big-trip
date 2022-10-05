@@ -45,3 +45,13 @@ export const UI_UPDATE_TYPES = {
   ALL: 'ALL',
   POINT: 'POINT',
 };
+
+export const METHODS = {
+  GET: 'GET',
+  POST: 'POST',
+  PUT: 'PUT',
+  DELETE: 'DELETE',
+};
+
+export const AUTHORIZATION = 'Basic big-trip-sioda';
+export const END_POINT = 'https://18.ecmascript.pages.academy/big-trip';
