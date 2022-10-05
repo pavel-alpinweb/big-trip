@@ -5,7 +5,7 @@ import HeaderPresenter from './header-presenter.js';
 import PointPresenter from './point-presenter.js';
 import FiltersPresenter from './filters-presenter.js';
 import SortPresenter from './sort-presenter';
-import {getAllPoints, getAllDestinations, getAllOffers, createPoint} from '../mock/mock';
+import {createPoint} from '../mock/mock';
 import {UI_UPDATE_TYPES} from '../utils/constants';
 
 export default class ListPresenter {
@@ -171,9 +171,9 @@ export default class ListPresenter {
   };
 
   async init() {
-    const destinations = await getAllDestinations();
-    const points = await getAllPoints();
-    const offers = await getAllOffers();
+    const destinations = await this.#destinationsService.getAllDestinations();
+    const points = await this.#pointsService.getAllPoints();
+    const offers = await this.#offersService.getAllOffers();
     this.#eventsModel.setAllDestinations(destinations);
     this.#eventsModel.setAllPoints(points);
     this.#eventsModel.setAllOffers(offers);

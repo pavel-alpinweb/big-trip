@@ -54,4 +54,4 @@ export const METHODS = {
 };
 
 export const AUTHORIZATION = 'Basic big-trip-sioda';
-export const END_POINT = 'https://18.ecmascript.pages.academy/big-trip/';
+export const END_POINT = 'https://18.ecmascript.pages.academy/big-trip';
