@@ -1,5 +1,4 @@
 import {render, remove} from '../framework/render.js';
-import {deletePoints, updatePoint} from '../mock/mock.js';
 import {POINT_MODES, UI_UPDATE_TYPES} from '../utils/constants.js';
 import PointForm from '../view/point-form.js';
 import Point from '../view/point.js';
@@ -53,7 +52,7 @@ export default class PointPresenter {
   #initPoint() {
 
     this.#pointComponent.setClickFavoriteHandler(async () => {
-      const result = await updatePoint({
+      const result = await this.#pointsService.updatePoint({
         ...this.#pointComponent.props.point,
         'is_favorite': !this.#pointComponent.props.point['is_favorite']
       });
@@ -87,10 +86,9 @@ export default class PointPresenter {
     this.#pontFormComponent.setDeleteClickHandler(async () => {
       this.#mode = POINT_MODES.DEFAULT;
       const id = this.#pontFormComponent.props.point.id;
-      await deletePoints(this.#pontFormComponent.props.point.id);
+      await this.#pointsService.deletePoints(this.#pontFormComponent.props.point.id);
       this.#eventsModel.deleteCurrentPoint(id);
       this.#pontFormComponent.resetState();
-      this.replaceComponents(this.#pointComponent.element, this.#pontFormComponent.element);
       document.removeEventListener('keydown', onEscKeyDown);
     });
 

@@ -26,4 +26,12 @@ export default class PointsApiService extends ApiService{
     });
     return PointsApiService.parseResponse(response);
   }
+
+  async deletePoints(pointId) {
+    return await this._load({
+      url: `points/${pointId}`,
+      method: METHODS.DELETE,
+      headers: new Headers({'Content-Type': 'application/json'}),
+    });
+  }
 }
