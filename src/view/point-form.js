@@ -395,13 +395,16 @@ export default class PointForm extends AbstractStatefulView{
   }
 
   #changePointDestination(name) {
-    this.updateElement({
-      point: {
-        ...this._state.point,
-        destination: this.#getDestinationByName(name).id,
-      },
-      destination: this.#getDestinationByName(name),
-    });
+    const isInclude = this.props.destinationsList.find((destination) => destination.name === name.trim());
+    if (isInclude) {
+      this.updateElement({
+        point: {
+          ...this._state.point,
+          destination: this.#getDestinationByName(name).id,
+        },
+        destination: this.#getDestinationByName(name),
+      });
+    }
   }
 
   resetState() {
