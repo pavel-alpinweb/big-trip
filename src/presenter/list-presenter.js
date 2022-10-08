@@ -1,4 +1,5 @@
 import {render, remove, RenderPosition} from '../framework/render.js';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 import PointForm from '../view/point-form.js';
 import EmptyMessage from '../view/empty-message.js';
 import LoadingMessage from '../view/loading-message.js';
@@ -24,6 +25,7 @@ export default class ListPresenter {
   #offersService = null;
   #destinationsService = null;
   #loadingMessageComponent = null;
+  #uiBlocker = null;
 
   constructor({
     eventsModel,
@@ -43,6 +45,7 @@ export default class ListPresenter {
     this.#offersService = offersService;
     this.#destinationsService = destinationsService;
     this.#loadingMessageComponent = new LoadingMessage();
+    this.#uiBlocker = new UiBlocker(0, 1000);
   }
 
   resetAllPointsView = () => {
@@ -85,7 +88,9 @@ export default class ListPresenter {
     });
     this.#newPointFormComponent.setSubmitHandler(async (isNewPoint, point) => {
       if (isNewPoint) {
+        this.#uiBlocker.block();
         const result = await this.#pointsService.createPoint(point);
+        this.#uiBlocker.unblock();
         this.#eventsModel.pushNewPoint(result);
         this.closeNewPointForm(buttonComponent, onEscKeyDown);
       }
