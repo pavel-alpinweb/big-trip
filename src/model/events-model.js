@@ -109,9 +109,8 @@ export default class EventsModel extends Observable {
       return `${startMonth} ${startDate}`;
     } else if(startMonth === finishMonth) {
       return `${startMonth} ${startDate} &mdash; ${finishDate}`;
-    } else {
-      return `${startMonth} ${startDate} &mdash; ${finishMonth} ${finishDate}`;
     }
+    return `${startMonth} ${startDate} &mdash; ${finishMonth} ${finishDate}`;
   }
 
   getOffersListByIds = (type, idsList) => {

@@ -40,7 +40,9 @@ const createOffersListTemplate = (offers, offersIds) => {
 };
 
 const createDestinationTemplate = (destination) => {
-  if (!destination) {return '';}
+  if (!destination) {
+    return '';
+  }
   else {return `
   <section class="event__section  event__section--destination">
     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
@@ -57,7 +59,9 @@ const createDestinationTemplate = (destination) => {
 };
 
 const createDestinationOptionsTemplate = (destinationsList) => {
-  if (destinationsList.length <= 0) {return '';}
+  if (destinationsList.length <= 0) {
+    return '';
+  }
   else {
     return `
       <datalist id="destination-list-1">
@@ -277,6 +281,31 @@ export default class PointForm extends AbstractStatefulView{
     return createPointFormTemplate(this._state);
   }
 
+  removeElement = () => {
+    super.removeElement();
+
+    if (this.#fromDatepicker) {
+      this.#fromDatepicker.destroy();
+      this.#fromDatepicker = null;
+    }
+    if (this.#toDatepicker) {
+      this.#toDatepicker.destroy();
+      this.#toDatepicker = null;
+    }
+  };
+
+  resetState() {
+    this.updateElement({...this.props});
+  }
+
+  _restoreHandlers = () => {
+    this.#setInnerHandlers();
+    this.#setDatepicker();
+    this.setCloseClickHandler(this._callback.closeClick);
+    this.setDeleteClickHandler(this._callback.closeDeleteClick);
+    this.setSubmitHandler(this._callback.submit);
+  };
+
   changeSavingStatus() {
     this.updateElement({
       ...this._state,
@@ -288,27 +317,6 @@ export default class PointForm extends AbstractStatefulView{
     this.updateElement({
       ...this._state,
       isDeleting: !this._state.isDeleting,
-    });
-  }
-
-  #setInnerHandlers() {
-    const typeInputsElements = this.element.querySelectorAll('.event__type-input');
-    typeInputsElements.forEach((el) => {
-      el.addEventListener('change', (event) => {
-        this.#changePointType(event.target.value);
-      });
-    });
-    this.element.querySelector('#event-destination-1').addEventListener('change', (event) => {
-      this.#changePointDestination(event.target.value);
-    });
-    this.element.querySelector(`#event-price-${this.props.point.id}`).addEventListener('input', (event) => {
-      this.#changePointPrice(event.target.value);
-    });
-    const inputCheckBoxes = this.element.querySelectorAll('.event__offer-checkbox');
-    inputCheckBoxes.forEach((el) => {
-      el.addEventListener('change', (event) => {
-        this.#changePointOffersList(event.target.value);
-      });
     });
   }
 
@@ -357,19 +365,6 @@ export default class PointForm extends AbstractStatefulView{
         'date_to': resultDate,
       }
     });
-  };
-
-  removeElement = () => {
-    super.removeElement();
-
-    if (this.#fromDatepicker) {
-      this.#fromDatepicker.destroy();
-      this.#fromDatepicker = null;
-    }
-    if (this.#toDatepicker) {
-      this.#toDatepicker.destroy();
-      this.#toDatepicker = null;
-    }
   };
 
   #changePointType(type) {
@@ -427,8 +422,25 @@ export default class PointForm extends AbstractStatefulView{
     }
   }
 
-  resetState() {
-    this.updateElement({...this.props});
+  #setInnerHandlers() {
+    const typeInputsElements = this.element.querySelectorAll('.event__type-input');
+    typeInputsElements.forEach((el) => {
+      el.addEventListener('change', (event) => {
+        this.#changePointType(event.target.value);
+      });
+    });
+    this.element.querySelector('#event-destination-1').addEventListener('change', (event) => {
+      this.#changePointDestination(event.target.value);
+    });
+    this.element.querySelector(`#event-price-${this.props.point.id}`).addEventListener('input', (event) => {
+      this.#changePointPrice(event.target.value);
+    });
+    const inputCheckBoxes = this.element.querySelectorAll('.event__offer-checkbox');
+    inputCheckBoxes.forEach((el) => {
+      el.addEventListener('change', (event) => {
+        this.#changePointOffersList(event.target.value);
+      });
+    });
   }
 
   setCloseClickHandler = (callback) => {
@@ -454,12 +466,9 @@ export default class PointForm extends AbstractStatefulView{
     });
   };
 
-  _restoreHandlers = () => {
-    this.#setInnerHandlers();
-    this.#setDatepicker();
-    this.setCloseClickHandler(this._callback.closeClick);
-    this.setDeleteClickHandler(this._callback.closeDeleteClick);
-    this.setSubmitHandler(this._callback.submit);
+  deleteClickHandler = () => {
+    this.element.querySelector('.event__reset-btn').removeEventListener('click', this._callback.closeClick);
+    this._callback.closeClick = null;
   };
 
   #clickCloseHandler = (evt) => {
@@ -470,11 +479,6 @@ export default class PointForm extends AbstractStatefulView{
   #clickDeleteHandler = (evt) => {
     evt.preventDefault();
     this._callback.closeDeleteClick();
-  };
-
-  deleteClickHandler = () => {
-    this.element.querySelector('.event__reset-btn').removeEventListener('click', this._callback.closeClick);
-    this._callback.closeClick = null;
   };
 
   #submitHandler = (event, isNewPoint, point) => {

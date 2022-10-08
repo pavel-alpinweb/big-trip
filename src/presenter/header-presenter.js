@@ -21,6 +21,7 @@ export default class HeaderPresenter {
   init() {
     this.#buttonComponent = new NewEventButton();
     render(this.#buttonComponent, this.#headerContainer);
+    this.#buttonComponent.changeBtnState();
     if (this.#eventsModel.totalPrice && this.#eventsModel.pointsNames && this.#eventsModel.tripDuring) {
       this.#tripInfoComponent = new TripInfo({
         totalPrice: this.#eventsModel.totalPrice,
@@ -32,7 +33,6 @@ export default class HeaderPresenter {
         this.#displayPoints(this.#eventsModel.pointsSortedByDay);
       });
       render(this.#tripInfoComponent, this.#headerContainer, RenderPosition.AFTERBEGIN);
-    } else {
       this.#buttonComponent.changeBtnState();
     }
   }
