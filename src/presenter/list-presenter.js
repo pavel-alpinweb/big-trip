@@ -91,6 +91,7 @@ export default class ListPresenter {
       try {
         if (isNewPoint) {
           this.#uiBlocker.block();
+          this.#newPointFormComponent.changeSavingStatus();
           const result = await this.#pointsService.createPoint(point);
           this.#uiBlocker.unblock();
           this.#eventsModel.pushNewPoint(result);
@@ -98,6 +99,7 @@ export default class ListPresenter {
         }
       } catch (e) {
         this.#newPointFormComponent.shake(() => {
+          this.#newPointFormComponent.changeSavingStatus();
           this.#uiBlocker.unblock();
         });
       }

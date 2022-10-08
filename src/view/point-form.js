@@ -9,6 +9,9 @@ import 'flatpickr/dist/flatpickr.min.css';
 
 const isChecked = (id, offersIds) => offersIds.includes(id) ? 'checked' : '';
 
+const isDeleting = (deleting) => deleting ? 'Deleting...' : 'Delete';
+const isSaving = (saving) => saving ? 'Saving...' : 'Save';
+
 const isEventChecked = (value, type) => value === type ? 'checked' : '';
 
 const createOffersListTemplate = (offers, offersIds) => {
@@ -66,7 +69,8 @@ const createDestinationOptionsTemplate = (destinationsList) => {
   }
 };
 
-const createDeleteBtnTemplate = (isNewPoint) => isNewPoint ? '' : '<button class="event__reset-btn" data-delete-btn type="reset">Delete</button>';
+const createDeleteBtnTemplate = (isNewPoint, deleting) => isNewPoint ? '' :
+  `<button class="event__reset-btn" data-delete-btn type="reset">${isDeleting(deleting)}</button>`;
 
 const createCancelBtnTemplate = (isNewPoint) => isNewPoint ? '<button class="event__reset-btn" data-cancel-btn type="reset">Cancel</button>' : '';
 
@@ -232,8 +236,8 @@ const createPointFormTemplate = (props) => `
         <input class="event__input  event__input--price" id="event-price-${props.point.id}" type="number" name="event-price" value="${props.point.base_price}">
       </div>
 
-      <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-      ${createDeleteBtnTemplate(props.isNewPoint)}
+      <button class="event__save-btn  btn  btn--blue" type="submit">${isSaving(props.isSaving)}</button>
+      ${createDeleteBtnTemplate(props.isNewPoint, props.isDeleting)}
       ${createCancelBtnTemplate(props.isNewPoint)}
       ${createRollUpTemplate(props.isNewPoint)}
     </header>
@@ -260,6 +264,8 @@ export default class PointForm extends AbstractStatefulView{
     super();
     this.props = props;
     this._state = {...this.props};
+    this._state.isSaving = false;
+    this._state.isDeleting = false;
     this.#setInnerHandlers();
     this.#getOffersList = getOffersList;
     this.#getDestinationByName = getDestinationByName;
@@ -269,6 +275,20 @@ export default class PointForm extends AbstractStatefulView{
 
   get template() {
     return createPointFormTemplate(this._state);
+  }
+
+  changeSavingStatus() {
+    this.updateElement({
+      ...this._state,
+      isSaving: !this._state.isSaving,
+    });
+  }
+
+  changeDeletingStatus() {
+    this.updateElement({
+      ...this._state,
+      isDeleting: !this._state.isDeleting,
+    });
   }
 
   #setInnerHandlers() {

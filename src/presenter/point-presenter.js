@@ -99,6 +99,7 @@ export default class PointPresenter {
         this.#mode = POINT_MODES.DEFAULT;
         const id = this.#pontFormComponent.props.point.id;
         this.#uiBlocker.block();
+        this.#pontFormComponent.changeDeletingStatus();
         await this.#pointsService.deletePoints(this.#pontFormComponent.props.point.id);
         this.#uiBlocker.unblock();
         this.#eventsModel.deleteCurrentPoint(id);
@@ -106,6 +107,7 @@ export default class PointPresenter {
         document.removeEventListener('keydown', onEscKeyDown);
       } catch (e) {
         this.#pontFormComponent.shake(() => {
+          this.#pontFormComponent.changeDeletingStatus();
           this.#uiBlocker.unblock();
         });
       }
@@ -115,6 +117,7 @@ export default class PointPresenter {
       try {
         if (!isNewPoint) {
           this.#uiBlocker.block();
+          this.#pontFormComponent.changeSavingStatus();
           const result = await this.#pointsService.updatePoint(point);
           this.#uiBlocker.unblock();
           this.#eventsModel.updateCurrentPoint(UI_UPDATE_TYPES.ALL, result);
@@ -122,6 +125,7 @@ export default class PointPresenter {
         this.#mode = POINT_MODES.DEFAULT;
       } catch (e) {
         this.#pontFormComponent.shake(() => {
+          this.#pontFormComponent.changeSavingStatus();
           this.#uiBlocker.unblock();
         });
       }
