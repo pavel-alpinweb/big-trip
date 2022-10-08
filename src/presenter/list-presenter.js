@@ -120,6 +120,7 @@ export default class ListPresenter {
         eventsModel: this.#eventsModel,
         reset: this.resetAllPointsView,
         destinationsList: this.#eventsModel.destinations,
+        uiBlocker: this.#uiBlocker,
       });
       this.#pointPresentersMap.set(point.id, pointPresenter);
       pointPresenter.init();

@@ -16,6 +16,7 @@ export default class PointPresenter {
   #destination = null;
   #destinationsList = null;
   #pointsService = null;
+  #uiBlocker = null;
   constructor({
     listContainer,
     point,
@@ -26,6 +27,7 @@ export default class PointPresenter {
     reset,
     destinationsList,
     pointsService,
+    uiBlocker,
   }) {
     this.#listContainer = listContainer;
     this.#eventsModel = eventsModel;
@@ -36,6 +38,7 @@ export default class PointPresenter {
     this.#destinationsList = destinationsList;
     this.#resetView = reset;
     this.#pointsService = pointsService;
+    this.#uiBlocker = uiBlocker;
   }
 
   replaceComponents(newComponent,oldComponent) {
@@ -52,10 +55,12 @@ export default class PointPresenter {
   #initPoint() {
 
     this.#pointComponent.setClickFavoriteHandler(async () => {
+      this.#uiBlocker.block();
       const result = await this.#pointsService.updatePoint({
         ...this.#pointComponent.props.point,
         'is_favorite': !this.#pointComponent.props.point['is_favorite']
       });
+      this.#uiBlocker.unblock();
       this.#eventsModel.updateCurrentPoint(UI_UPDATE_TYPES.POINT, result);
     });
 
@@ -86,7 +91,9 @@ export default class PointPresenter {
     this.#pontFormComponent.setDeleteClickHandler(async () => {
       this.#mode = POINT_MODES.DEFAULT;
       const id = this.#pontFormComponent.props.point.id;
+      this.#uiBlocker.block();
       await this.#pointsService.deletePoints(this.#pontFormComponent.props.point.id);
+      this.#uiBlocker.unblock();
       this.#eventsModel.deleteCurrentPoint(id);
       this.#pontFormComponent.resetState();
       document.removeEventListener('keydown', onEscKeyDown);
@@ -94,7 +101,9 @@ export default class PointPresenter {
 
     this.#pontFormComponent.setSubmitHandler(async (isNewPoint, point) => {
       if (!isNewPoint) {
+        this.#uiBlocker.block();
         const result = await this.#pointsService.updatePoint(point);
+        this.#uiBlocker.unblock();
         this.#eventsModel.updateCurrentPoint(UI_UPDATE_TYPES.ALL, result);
       }
       this.#mode = POINT_MODES.DEFAULT;
