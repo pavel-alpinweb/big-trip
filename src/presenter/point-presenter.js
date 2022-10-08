@@ -56,12 +56,18 @@ export default class PointPresenter {
 
     this.#pointComponent.setClickFavoriteHandler(async () => {
       this.#uiBlocker.block();
-      const result = await this.#pointsService.updatePoint({
-        ...this.#pointComponent.props.point,
-        'is_favorite': !this.#pointComponent.props.point['is_favorite']
-      });
-      this.#uiBlocker.unblock();
-      this.#eventsModel.updateCurrentPoint(UI_UPDATE_TYPES.POINT, result);
+      try {
+        const result = await this.#pointsService.updatePoint({
+          ...this.#pointComponent.props.point,
+          'is_favorite': !this.#pointComponent.props.point['is_favorite']
+        });
+        this.#uiBlocker.unblock();
+        this.#eventsModel.updateCurrentPoint(UI_UPDATE_TYPES.POINT, result);
+      } catch (e) {
+        this.#pointComponent.shake(() => {
+          this.#uiBlocker.unblock();
+        });
+      }
     });
 
     const onEscKeyDown = (evt) => {
@@ -89,24 +95,36 @@ export default class PointPresenter {
     });
 
     this.#pontFormComponent.setDeleteClickHandler(async () => {
-      this.#mode = POINT_MODES.DEFAULT;
-      const id = this.#pontFormComponent.props.point.id;
-      this.#uiBlocker.block();
-      await this.#pointsService.deletePoints(this.#pontFormComponent.props.point.id);
-      this.#uiBlocker.unblock();
-      this.#eventsModel.deleteCurrentPoint(id);
-      this.#pontFormComponent.resetState();
-      document.removeEventListener('keydown', onEscKeyDown);
+      try {
+        this.#mode = POINT_MODES.DEFAULT;
+        const id = this.#pontFormComponent.props.point.id;
+        this.#uiBlocker.block();
+        await this.#pointsService.deletePoints(this.#pontFormComponent.props.point.id);
+        this.#uiBlocker.unblock();
+        this.#eventsModel.deleteCurrentPoint(id);
+        this.#pontFormComponent.resetState();
+        document.removeEventListener('keydown', onEscKeyDown);
+      } catch (e) {
+        this.#pontFormComponent.shake(() => {
+          this.#uiBlocker.unblock();
+        });
+      }
     });
 
     this.#pontFormComponent.setSubmitHandler(async (isNewPoint, point) => {
-      if (!isNewPoint) {
-        this.#uiBlocker.block();
-        const result = await this.#pointsService.updatePoint(point);
-        this.#uiBlocker.unblock();
-        this.#eventsModel.updateCurrentPoint(UI_UPDATE_TYPES.ALL, result);
+      try {
+        if (!isNewPoint) {
+          this.#uiBlocker.block();
+          const result = await this.#pointsService.updatePoint(point);
+          this.#uiBlocker.unblock();
+          this.#eventsModel.updateCurrentPoint(UI_UPDATE_TYPES.ALL, result);
+        }
+        this.#mode = POINT_MODES.DEFAULT;
+      } catch (e) {
+        this.#pontFormComponent.shake(() => {
+          this.#uiBlocker.unblock();
+        });
       }
-      this.#mode = POINT_MODES.DEFAULT;
     });
   }
 

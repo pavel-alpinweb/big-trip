@@ -88,12 +88,18 @@ export default class ListPresenter {
       this.closeNewPointForm(buttonComponent, onEscKeyDown);
     });
     this.#newPointFormComponent.setSubmitHandler(async (isNewPoint, point) => {
-      if (isNewPoint) {
-        this.#uiBlocker.block();
-        const result = await this.#pointsService.createPoint(point);
-        this.#uiBlocker.unblock();
-        this.#eventsModel.pushNewPoint(result);
-        this.closeNewPointForm(buttonComponent, onEscKeyDown);
+      try {
+        if (isNewPoint) {
+          this.#uiBlocker.block();
+          const result = await this.#pointsService.createPoint(point);
+          this.#uiBlocker.unblock();
+          this.#eventsModel.pushNewPoint(result);
+          this.closeNewPointForm(buttonComponent, onEscKeyDown);
+        }
+      } catch (e) {
+        this.#newPointFormComponent.shake(() => {
+          this.#uiBlocker.unblock();
+        });
       }
     });
     render(this.#newPointFormComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
