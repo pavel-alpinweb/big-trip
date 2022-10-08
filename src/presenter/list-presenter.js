@@ -3,6 +3,7 @@ import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 import PointForm from '../view/point-form.js';
 import EmptyMessage from '../view/empty-message.js';
 import LoadingMessage from '../view/loading-message.js';
+import ErrorMessage from '../view/error-message';
 import HeaderPresenter from './header-presenter.js';
 import PointPresenter from './point-presenter.js';
 import FiltersPresenter from './filters-presenter.js';
@@ -188,17 +189,21 @@ export default class ListPresenter {
   };
 
   async init() {
-    this.#initFilters();
-    this.#initSort();
-    this.#initHeader();
-    render(this.#loadingMessageComponent, this.#listContainer);
-    const destinations = await this.#destinationsService.getAllDestinations();
-    const offers = await this.#offersService.getAllOffers();
-    const points = await this.#pointsService.getAllPoints();
-    this.#eventsModel.setAllDestinations(destinations);
-    this.#eventsModel.setAllOffers(offers);
-    this.#eventsModel.setAllPoints(points);
-    remove(this.#loadingMessageComponent);
-    this.#loadingMessageComponent = null;
+    try {
+      this.#initFilters();
+      this.#initSort();
+      this.#initHeader();
+      render(this.#loadingMessageComponent, this.#listContainer);
+      const destinations = await this.#destinationsService.getAllDestinations();
+      const offers = await this.#offersService.getAllOffers();
+      const points = await this.#pointsService.getAllPoints();
+      this.#eventsModel.setAllDestinations(destinations);
+      this.#eventsModel.setAllOffers(offers);
+      this.#eventsModel.setAllPoints(points);
+      this.#loadingMessageComponent = null;
+    } catch (e) {
+      remove(this.#loadingMessageComponent);
+      render(new ErrorMessage(), this.#listContainer);
+    }
   }
 }
