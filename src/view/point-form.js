@@ -229,7 +229,7 @@ const createPointFormTemplate = (props) => `
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-${props.point.id}" type="text" name="event-price" value="${props.point.base_price}">
+        <input class="event__input  event__input--price" id="event-price-${props.point.id}" type="number" name="event-price" value="${props.point.base_price}">
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -361,10 +361,16 @@ export default class PointForm extends AbstractStatefulView{
   }
 
   #changePointPrice(price) {
+    let resultPrice = Number(price);
+    if (resultPrice < 0) {
+      resultPrice = 1;
+    } else {
+      resultPrice = Math.floor(resultPrice);
+    }
     this._setState({
       point: {
         ...this._state.point,
-        'base_price': Number(price),
+        'base_price': resultPrice,
       },
     });
   }
