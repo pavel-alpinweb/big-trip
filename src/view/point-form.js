@@ -300,7 +300,7 @@ export default class PointForm extends AbstractStatefulView{
         'time_24hr': true,
         enableTime: true,
         defaultDate: new Date(this._state.point.date_from),
-        onChange: this.#dateFromChangeHandler,
+        onClose: this.#dateFromChangeHandler,
       },
     );
     this.#toDatepicker = flatpickr(
@@ -310,23 +310,26 @@ export default class PointForm extends AbstractStatefulView{
         'time_24hr': true,
         enableTime: true,
         defaultDate: new Date(this._state.point.date_to),
-        onChange: this.#dateToChangeHandler,
+        onClose: this.#dateToChangeHandler,
       },
     );
   };
 
   #dateFromChangeHandler = ([userDate]) => {
+    let resultDate = this._state.point.date_to;
+    const isValidDate = dayjs(userDate).diff(resultDate, 'm') < 0;
+    if (isValidDate) {resultDate = userDate;}
     this.updateElement({
       point: {
         ...this._state.point,
-        'date_from': userDate,
+        'date_from': resultDate,
       }
     });
   };
 
   #dateToChangeHandler = ([userDate]) => {
     let resultDate = this._state.point.date_from;
-    const isValidDate = dayjs(userDate).diff(resultDate, 'd') > 0;
+    const isValidDate = dayjs(userDate).diff(resultDate, 'm') > 0;
     if (isValidDate) {resultDate = userDate;}
     this.updateElement({
       point: {
